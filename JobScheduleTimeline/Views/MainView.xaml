@@ -1,0 +1,87 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" 
+    xmlns:ViewModels="clr-namespace:JobScheduleTimeline.ViewModels"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+    xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduling" 
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+    x:Class="JobScheduleTimeline.Views.MainView"
+    mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="1000">
+    <UserControl.DataContext>
+        <ViewModels:MainViewModel/>
+    </UserControl.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Filter">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <Label Content="Start Date " VerticalAlignment="Stretch"/>
+                    <dxe:DateEdit x:Name="DateEditWithNavigatorAndTimePicker" MinWidth="100" Mask="G" MaskUseAsDisplayFormat="True">
+                        <dxe:DateEdit.StyleSettings>
+                            <dxe:DateEditNavigatorWithTimePickerStyleSettings/>
+                        </dxe:DateEdit.StyleSettings>
+                    </dxe:DateEdit>
+                    <Label Content="End Date " Margin="15,0,0,0" VerticalAlignment="Stretch"/>
+                    <dxe:DateEdit x:Name="DateEditWithNavigatorAndTimePicker1" MinWidth="100" Mask="G" MaskUseAsDisplayFormat="True">
+                        <dxe:DateEdit.StyleSettings>
+                            <dxe:DateEditNavigatorWithTimePickerStyleSettings/>
+                        </dxe:DateEdit.StyleSettings>
+                    </dxe:DateEdit>
+                </StackPanel>
+
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,5">
+                        <Label Content="Select Jobs "/>
+                        <dxe:ComboBoxEdit Grid.Row="1" IsReadOnly="False" IsTextEditable="False"  MinWidth="100">
+                            <dxe:ComboBoxEdit.StyleSettings>
+                                <dxe:CheckedComboBoxStyleSettings/>
+                            </dxe:ComboBoxEdit.StyleSettings>
+                            <dxe:ComboBoxEditItem Content="Item 1"/>
+                            <dxe:ComboBoxEditItem Content="Item 2"/>
+                            <dxe:ComboBoxEditItem Content="Item 3"/>
+                            <dxe:ComboBoxEditItem Content="Item 4"/>
+                        </dxe:ComboBoxEdit>
+                    </StackPanel>
+
+                    <dx:SimpleButton Content="Search 🔎" MaxWidth="100" Grid.Row="1"/>
+
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="Timetable">
+            <dxg:GridControl AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True" Grid.Row="1">
+                <dxg:GridControl.View>
+                    <dxg:TableView/>
+                </dxg:GridControl.View>
+            </dxg:GridControl>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Timeline">
+            <dxsch:SchedulerControl>
+                <dxsch:TimelineView x:Name="timelineView1"/>
+            </dxsch:SchedulerControl>
+        </GroupBox>
+
+    </Grid>
+
+</UserControl>

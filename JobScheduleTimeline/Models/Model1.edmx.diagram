@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5c590cc437a844a4b71233a003b5134b" Name="Diagram1">
+        <EntityTypeShape EntityType="InternshipTaskModel.JobSchedule" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternshipTaskModel.JobScheduleChain" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternshipTaskModel.JobScheduleDependency" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternshipTaskModel.JobScheduleLog" Width="1.5" PointX="8.25" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternshipTaskModel.JobScheduleLogItem" Width="1.5" PointX="10.5" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternshipTaskModel.JobScheduleLogStatu" Width="1.5" PointX="6" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternshipTaskModel.JobScheduleMethod" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternshipTaskModel.JobScheduleParameter" Width="1.5" PointX="5.25" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="InternshipTaskModel.JobScheduleStamp" Width="1.5" PointX="10.5" PointY="6.375" IsExpanded="true" />
+        <AssociationConnector Association="InternshipTaskModel.FK_JobScheduleStamps_JobSchedule" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.JobSchedule_JobScheduleDependency" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.JobSchedule_JobScheduleDependency_DependencyID" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.JobSchedule_JobScheduleLog" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.JobSchedule_JobScheduleParameter" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.JobScheduleChain_JobSchedule" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.JobScheduleMethod_JobSchedule" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.FK_JobScheduleStamps_JobScheduleLog" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.JobScheduleLog_JobScheduleLogItem" ManuallyRouted="false" />
+        <AssociationConnector Association="InternshipTaskModel.JobScheduleLogStatus_JobScheduleLog" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

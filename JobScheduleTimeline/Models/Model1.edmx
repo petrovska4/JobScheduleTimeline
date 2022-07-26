@@ -1,0 +1,728 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="InternshipTaskModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="JobSchedule">
+          <Key>
+            <PropertyRef Name="JobScheduleId" />
+          </Key>
+          <Property Name="JobScheduleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HostId" Type="int" Nullable="false" />
+          <Property Name="DateFrom" Type="date" Nullable="false" />
+          <Property Name="DateTo" Type="date" />
+          <Property Name="TimeFrom" Type="datetime" />
+          <Property Name="TimeTo" Type="datetime" />
+          <Property Name="FrequencyTypeId" Type="int" />
+          <Property Name="FrequencyInterval" Type="int" />
+          <Property Name="LastRun" Type="datetime" />
+          <Property Name="DateId" Type="int" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="NameEng" Type="varchar" MaxLength="100" />
+          <Property Name="JobScheduleMethodId" Type="int" Nullable="false" />
+          <Property Name="JobScheduleChainId" Type="smallint" />
+          <Property Name="Ordinal" Type="smallint" />
+        </EntityType>
+        <EntityType Name="JobScheduleChain">
+          <Key>
+            <PropertyRef Name="JobScheduleChainId" />
+          </Key>
+          <Property Name="JobScheduleChainId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobScheduleChainCode" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="DescriptionEng" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobScheduleDependency">
+          <Key>
+            <PropertyRef Name="JobScheduleDependencyId" />
+          </Key>
+          <Property Name="JobScheduleDependencyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobScheduleId" Type="int" Nullable="false" />
+          <Property Name="DependencyId" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobScheduleLog">
+          <Key>
+            <PropertyRef Name="JobScheduleLogId" />
+          </Key>
+          <Property Name="JobScheduleLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobScheduleId" Type="int" Nullable="false" />
+          <Property Name="Started" Type="datetime" Nullable="false" />
+          <Property Name="Ended" Type="datetime" />
+          <Property Name="DateId" Type="int" Nullable="false" />
+          <Property Name="HostId" Type="int" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="JobScheduleLogStatusId" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobScheduleLogItem">
+          <Key>
+            <PropertyRef Name="JobScheduleLogItemId" />
+          </Key>
+          <Property Name="JobScheduleLogItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobScheduleLogId" Type="int" Nullable="false" />
+          <Property Name="Info" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="LogSeverityId" Type="smallint" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobScheduleLogStatus">
+          <Key>
+            <PropertyRef Name="JobScheduleLogStatusId" />
+          </Key>
+          <Property Name="JobScheduleLogStatusId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobScheduleLogStatusCode" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="DescriptionEng" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="JobScheduleMethod">
+          <Key>
+            <PropertyRef Name="JobScheduleMethodId" />
+          </Key>
+          <Property Name="JobScheduleMethodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MethodName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="AssemblyName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ClassName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DescriptionEng" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="JobScheduleParameter">
+          <Key>
+            <PropertyRef Name="JobScheduleParameterId" />
+          </Key>
+          <Property Name="JobScheduleParameterId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobScheduleId" Type="int" Nullable="false" />
+          <Property Name="ParameterName" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobScheduleStamp">
+          <Key>
+            <PropertyRef Name="JobScheduleStampId" />
+          </Key>
+          <Property Name="JobScheduleStampId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobScheduleId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ValueInt" Type="bigint" />
+          <Property Name="ValueInfo" Type="nvarchar" MaxLength="100" />
+          <Property Name="ValueDate" Type="datetime" />
+          <Property Name="ValueBool" Type="bit" />
+          <Property Name="JobScheduleLogId" Type="int" />
+        </EntityType>
+        <Association Name="FK_JobScheduleStamps_JobSchedule">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleStamp" Type="Self.JobScheduleStamp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleStamp">
+              <PropertyRef Name="JobScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobScheduleStamps_JobScheduleLog">
+          <End Role="JobScheduleLog" Type="Self.JobScheduleLog" Multiplicity="0..1" />
+          <End Role="JobScheduleStamp" Type="Self.JobScheduleStamp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleLog">
+              <PropertyRef Name="JobScheduleLogId" />
+            </Principal>
+            <Dependent Role="JobScheduleStamp">
+              <PropertyRef Name="JobScheduleLogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobSchedule_JobScheduleDependency">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleDependency" Type="Self.JobScheduleDependency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleDependency">
+              <PropertyRef Name="JobScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobSchedule_JobScheduleDependency_DependencyID">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleDependency" Type="Self.JobScheduleDependency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleDependency">
+              <PropertyRef Name="DependencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobSchedule_JobScheduleLog">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleLog" Type="Self.JobScheduleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleLog">
+              <PropertyRef Name="JobScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobSchedule_JobScheduleParameter">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleParameter" Type="Self.JobScheduleParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleParameter">
+              <PropertyRef Name="JobScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobScheduleChain_JobSchedule">
+          <End Role="JobScheduleChain" Type="Self.JobScheduleChain" Multiplicity="0..1" />
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleChain">
+              <PropertyRef Name="JobScheduleChainId" />
+            </Principal>
+            <Dependent Role="JobSchedule">
+              <PropertyRef Name="JobScheduleChainId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobScheduleLog_JobScheduleLogItem">
+          <End Role="JobScheduleLog" Type="Self.JobScheduleLog" Multiplicity="1" />
+          <End Role="JobScheduleLogItem" Type="Self.JobScheduleLogItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleLog">
+              <PropertyRef Name="JobScheduleLogId" />
+            </Principal>
+            <Dependent Role="JobScheduleLogItem">
+              <PropertyRef Name="JobScheduleLogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobScheduleLogStatus_JobScheduleLog">
+          <End Role="JobScheduleLogStatus" Type="Self.JobScheduleLogStatus" Multiplicity="1" />
+          <End Role="JobScheduleLog" Type="Self.JobScheduleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleLogStatus">
+              <PropertyRef Name="JobScheduleLogStatusId" />
+            </Principal>
+            <Dependent Role="JobScheduleLog">
+              <PropertyRef Name="JobScheduleLogStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobScheduleMethod_JobSchedule">
+          <End Role="JobScheduleMethod" Type="Self.JobScheduleMethod" Multiplicity="1" />
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleMethod">
+              <PropertyRef Name="JobScheduleMethodId" />
+            </Principal>
+            <Dependent Role="JobSchedule">
+              <PropertyRef Name="JobScheduleMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InternshipTaskModelStoreContainer">
+          <EntitySet Name="JobSchedule" EntityType="Self.JobSchedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobScheduleChain" EntityType="Self.JobScheduleChain" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobScheduleDependency" EntityType="Self.JobScheduleDependency" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobScheduleLog" EntityType="Self.JobScheduleLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobScheduleLogItem" EntityType="Self.JobScheduleLogItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobScheduleLogStatus" EntityType="Self.JobScheduleLogStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobScheduleMethod" EntityType="Self.JobScheduleMethod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobScheduleParameter" EntityType="Self.JobScheduleParameter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobScheduleStamp" EntityType="Self.JobScheduleStamp" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_JobScheduleStamps_JobSchedule" Association="Self.FK_JobScheduleStamps_JobSchedule">
+            <End Role="JobSchedule" EntitySet="JobSchedule" />
+            <End Role="JobScheduleStamp" EntitySet="JobScheduleStamp" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobScheduleStamps_JobScheduleLog" Association="Self.FK_JobScheduleStamps_JobScheduleLog">
+            <End Role="JobScheduleLog" EntitySet="JobScheduleLog" />
+            <End Role="JobScheduleStamp" EntitySet="JobScheduleStamp" />
+          </AssociationSet>
+          <AssociationSet Name="JobSchedule_JobScheduleDependency" Association="Self.JobSchedule_JobScheduleDependency">
+            <End Role="JobSchedule" EntitySet="JobSchedule" />
+            <End Role="JobScheduleDependency" EntitySet="JobScheduleDependency" />
+          </AssociationSet>
+          <AssociationSet Name="JobSchedule_JobScheduleDependency_DependencyID" Association="Self.JobSchedule_JobScheduleDependency_DependencyID">
+            <End Role="JobSchedule" EntitySet="JobSchedule" />
+            <End Role="JobScheduleDependency" EntitySet="JobScheduleDependency" />
+          </AssociationSet>
+          <AssociationSet Name="JobSchedule_JobScheduleLog" Association="Self.JobSchedule_JobScheduleLog">
+            <End Role="JobSchedule" EntitySet="JobSchedule" />
+            <End Role="JobScheduleLog" EntitySet="JobScheduleLog" />
+          </AssociationSet>
+          <AssociationSet Name="JobSchedule_JobScheduleParameter" Association="Self.JobSchedule_JobScheduleParameter">
+            <End Role="JobSchedule" EntitySet="JobSchedule" />
+            <End Role="JobScheduleParameter" EntitySet="JobScheduleParameter" />
+          </AssociationSet>
+          <AssociationSet Name="JobScheduleChain_JobSchedule" Association="Self.JobScheduleChain_JobSchedule">
+            <End Role="JobScheduleChain" EntitySet="JobScheduleChain" />
+            <End Role="JobSchedule" EntitySet="JobSchedule" />
+          </AssociationSet>
+          <AssociationSet Name="JobScheduleLog_JobScheduleLogItem" Association="Self.JobScheduleLog_JobScheduleLogItem">
+            <End Role="JobScheduleLog" EntitySet="JobScheduleLog" />
+            <End Role="JobScheduleLogItem" EntitySet="JobScheduleLogItem" />
+          </AssociationSet>
+          <AssociationSet Name="JobScheduleLogStatus_JobScheduleLog" Association="Self.JobScheduleLogStatus_JobScheduleLog">
+            <End Role="JobScheduleLogStatus" EntitySet="JobScheduleLogStatus" />
+            <End Role="JobScheduleLog" EntitySet="JobScheduleLog" />
+          </AssociationSet>
+          <AssociationSet Name="JobScheduleMethod_JobSchedule" Association="Self.JobScheduleMethod_JobSchedule">
+            <End Role="JobScheduleMethod" EntitySet="JobScheduleMethod" />
+            <End Role="JobSchedule" EntitySet="JobSchedule" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="InternshipTaskModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="JobSchedule">
+          <Key>
+            <PropertyRef Name="JobScheduleId" />
+          </Key>
+          <Property Name="JobScheduleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HostId" Type="Int32" Nullable="false" />
+          <Property Name="DateFrom" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateTo" Type="DateTime" Precision="0" />
+          <Property Name="TimeFrom" Type="DateTime" Precision="3" />
+          <Property Name="TimeTo" Type="DateTime" Precision="3" />
+          <Property Name="FrequencyTypeId" Type="Int32" />
+          <Property Name="FrequencyInterval" Type="Int32" />
+          <Property Name="LastRun" Type="DateTime" Precision="3" />
+          <Property Name="DateId" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NameEng" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="JobScheduleMethodId" Type="Int32" Nullable="false" />
+          <Property Name="JobScheduleChainId" Type="Int16" />
+          <Property Name="Ordinal" Type="Int16" />
+          <NavigationProperty Name="JobScheduleStamps" Relationship="Self.FK_JobScheduleStamps_JobSchedule" FromRole="JobSchedule" ToRole="JobScheduleStamp" />
+          <NavigationProperty Name="JobScheduleDependencies" Relationship="Self.JobSchedule_JobScheduleDependency" FromRole="JobSchedule" ToRole="JobScheduleDependency" />
+          <NavigationProperty Name="JobScheduleDependencies1" Relationship="Self.JobSchedule_JobScheduleDependency_DependencyID" FromRole="JobSchedule" ToRole="JobScheduleDependency" />
+          <NavigationProperty Name="JobScheduleLogs" Relationship="Self.JobSchedule_JobScheduleLog" FromRole="JobSchedule" ToRole="JobScheduleLog" />
+          <NavigationProperty Name="JobScheduleParameters" Relationship="Self.JobSchedule_JobScheduleParameter" FromRole="JobSchedule" ToRole="JobScheduleParameter" />
+          <NavigationProperty Name="JobScheduleChain" Relationship="Self.JobScheduleChain_JobSchedule" FromRole="JobSchedule" ToRole="JobScheduleChain" />
+          <NavigationProperty Name="JobScheduleMethod" Relationship="Self.JobScheduleMethod_JobSchedule" FromRole="JobSchedule" ToRole="JobScheduleMethod" />
+        </EntityType>
+        <EntityType Name="JobScheduleChain">
+          <Key>
+            <PropertyRef Name="JobScheduleChainId" />
+          </Key>
+          <Property Name="JobScheduleChainId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobScheduleChainCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DescriptionEng" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="JobSchedules" Relationship="Self.JobScheduleChain_JobSchedule" FromRole="JobScheduleChain" ToRole="JobSchedule" />
+        </EntityType>
+        <EntityType Name="JobScheduleDependency">
+          <Key>
+            <PropertyRef Name="JobScheduleDependencyId" />
+          </Key>
+          <Property Name="JobScheduleDependencyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobScheduleId" Type="Int32" Nullable="false" />
+          <Property Name="DependencyId" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="JobSchedule" Relationship="Self.JobSchedule_JobScheduleDependency" FromRole="JobScheduleDependency" ToRole="JobSchedule" />
+          <NavigationProperty Name="JobSchedule1" Relationship="Self.JobSchedule_JobScheduleDependency_DependencyID" FromRole="JobScheduleDependency" ToRole="JobSchedule" />
+        </EntityType>
+        <EntityType Name="JobScheduleLog">
+          <Key>
+            <PropertyRef Name="JobScheduleLogId" />
+          </Key>
+          <Property Name="JobScheduleLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobScheduleId" Type="Int32" Nullable="false" />
+          <Property Name="Started" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Ended" Type="DateTime" Precision="3" />
+          <Property Name="DateId" Type="Int32" Nullable="false" />
+          <Property Name="HostId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="JobScheduleLogStatusId" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="JobSchedule" Relationship="Self.JobSchedule_JobScheduleLog" FromRole="JobScheduleLog" ToRole="JobSchedule" />
+          <NavigationProperty Name="JobScheduleStamps" Relationship="Self.FK_JobScheduleStamps_JobScheduleLog" FromRole="JobScheduleLog" ToRole="JobScheduleStamp" />
+          <NavigationProperty Name="JobScheduleLogItems" Relationship="Self.JobScheduleLog_JobScheduleLogItem" FromRole="JobScheduleLog" ToRole="JobScheduleLogItem" />
+          <NavigationProperty Name="JobScheduleLogStatu" Relationship="Self.JobScheduleLogStatus_JobScheduleLog" FromRole="JobScheduleLog" ToRole="JobScheduleLogStatus" />
+        </EntityType>
+        <EntityType Name="JobScheduleLogItem">
+          <Key>
+            <PropertyRef Name="JobScheduleLogItemId" />
+          </Key>
+          <Property Name="JobScheduleLogItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobScheduleLogId" Type="Int32" Nullable="false" />
+          <Property Name="Info" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LogSeverityId" Type="Int16" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="JobScheduleLog" Relationship="Self.JobScheduleLog_JobScheduleLogItem" FromRole="JobScheduleLogItem" ToRole="JobScheduleLog" />
+        </EntityType>
+        <EntityType Name="JobScheduleLogStatu">
+          <Key>
+            <PropertyRef Name="JobScheduleLogStatusId" />
+          </Key>
+          <Property Name="JobScheduleLogStatusId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobScheduleLogStatusCode" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DescriptionEng" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="JobScheduleLogs" Relationship="Self.JobScheduleLogStatus_JobScheduleLog" FromRole="JobScheduleLogStatus" ToRole="JobScheduleLog" />
+        </EntityType>
+        <EntityType Name="JobScheduleMethod">
+          <Key>
+            <PropertyRef Name="JobScheduleMethodId" />
+          </Key>
+          <Property Name="JobScheduleMethodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MethodName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AssemblyName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClassName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DescriptionEng" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="JobSchedules" Relationship="Self.JobScheduleMethod_JobSchedule" FromRole="JobScheduleMethod" ToRole="JobSchedule" />
+        </EntityType>
+        <EntityType Name="JobScheduleParameter">
+          <Key>
+            <PropertyRef Name="JobScheduleParameterId" />
+          </Key>
+          <Property Name="JobScheduleParameterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobScheduleId" Type="Int32" Nullable="false" />
+          <Property Name="ParameterName" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="JobSchedule" Relationship="Self.JobSchedule_JobScheduleParameter" FromRole="JobScheduleParameter" ToRole="JobSchedule" />
+        </EntityType>
+        <EntityType Name="JobScheduleStamp">
+          <Key>
+            <PropertyRef Name="JobScheduleStampId" />
+          </Key>
+          <Property Name="JobScheduleStampId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobScheduleId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ValueInt" Type="Int64" />
+          <Property Name="ValueInfo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ValueDate" Type="DateTime" Precision="3" />
+          <Property Name="ValueBool" Type="Boolean" />
+          <Property Name="JobScheduleLogId" Type="Int32" />
+          <NavigationProperty Name="JobSchedule" Relationship="Self.FK_JobScheduleStamps_JobSchedule" FromRole="JobScheduleStamp" ToRole="JobSchedule" />
+          <NavigationProperty Name="JobScheduleLog" Relationship="Self.FK_JobScheduleStamps_JobScheduleLog" FromRole="JobScheduleStamp" ToRole="JobScheduleLog" />
+        </EntityType>
+        <Association Name="FK_JobScheduleStamps_JobSchedule">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleStamp" Type="Self.JobScheduleStamp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleStamp">
+              <PropertyRef Name="JobScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobSchedule_JobScheduleDependency">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleDependency" Type="Self.JobScheduleDependency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleDependency">
+              <PropertyRef Name="JobScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobSchedule_JobScheduleDependency_DependencyID">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleDependency" Type="Self.JobScheduleDependency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleDependency">
+              <PropertyRef Name="DependencyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobSchedule_JobScheduleLog">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleLog" Type="Self.JobScheduleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleLog">
+              <PropertyRef Name="JobScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobSchedule_JobScheduleParameter">
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="1" />
+          <End Role="JobScheduleParameter" Type="Self.JobScheduleParameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobSchedule">
+              <PropertyRef Name="JobScheduleId" />
+            </Principal>
+            <Dependent Role="JobScheduleParameter">
+              <PropertyRef Name="JobScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobScheduleChain_JobSchedule">
+          <End Role="JobScheduleChain" Type="Self.JobScheduleChain" Multiplicity="0..1" />
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleChain">
+              <PropertyRef Name="JobScheduleChainId" />
+            </Principal>
+            <Dependent Role="JobSchedule">
+              <PropertyRef Name="JobScheduleChainId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobScheduleMethod_JobSchedule">
+          <End Role="JobScheduleMethod" Type="Self.JobScheduleMethod" Multiplicity="1" />
+          <End Role="JobSchedule" Type="Self.JobSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleMethod">
+              <PropertyRef Name="JobScheduleMethodId" />
+            </Principal>
+            <Dependent Role="JobSchedule">
+              <PropertyRef Name="JobScheduleMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobScheduleStamps_JobScheduleLog">
+          <End Role="JobScheduleLog" Type="Self.JobScheduleLog" Multiplicity="0..1" />
+          <End Role="JobScheduleStamp" Type="Self.JobScheduleStamp" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleLog">
+              <PropertyRef Name="JobScheduleLogId" />
+            </Principal>
+            <Dependent Role="JobScheduleStamp">
+              <PropertyRef Name="JobScheduleLogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobScheduleLog_JobScheduleLogItem">
+          <End Role="JobScheduleLog" Type="Self.JobScheduleLog" Multiplicity="1" />
+          <End Role="JobScheduleLogItem" Type="Self.JobScheduleLogItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleLog">
+              <PropertyRef Name="JobScheduleLogId" />
+            </Principal>
+            <Dependent Role="JobScheduleLogItem">
+              <PropertyRef Name="JobScheduleLogId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="JobScheduleLogStatus_JobScheduleLog">
+          <End Role="JobScheduleLogStatus" Type="Self.JobScheduleLogStatu" Multiplicity="1" />
+          <End Role="JobScheduleLog" Type="Self.JobScheduleLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobScheduleLogStatus">
+              <PropertyRef Name="JobScheduleLogStatusId" />
+            </Principal>
+            <Dependent Role="JobScheduleLog">
+              <PropertyRef Name="JobScheduleLogStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InternshipTaskEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="JobSchedules" EntityType="Self.JobSchedule" />
+          <EntitySet Name="JobScheduleChains" EntityType="Self.JobScheduleChain" />
+          <EntitySet Name="JobScheduleDependencies" EntityType="Self.JobScheduleDependency" />
+          <EntitySet Name="JobScheduleLogs" EntityType="Self.JobScheduleLog" />
+          <EntitySet Name="JobScheduleLogItems" EntityType="Self.JobScheduleLogItem" />
+          <EntitySet Name="JobScheduleLogStatus" EntityType="Self.JobScheduleLogStatu" />
+          <EntitySet Name="JobScheduleMethods" EntityType="Self.JobScheduleMethod" />
+          <EntitySet Name="JobScheduleParameters" EntityType="Self.JobScheduleParameter" />
+          <EntitySet Name="JobScheduleStamps" EntityType="Self.JobScheduleStamp" />
+          <AssociationSet Name="FK_JobScheduleStamps_JobSchedule" Association="Self.FK_JobScheduleStamps_JobSchedule">
+            <End Role="JobSchedule" EntitySet="JobSchedules" />
+            <End Role="JobScheduleStamp" EntitySet="JobScheduleStamps" />
+          </AssociationSet>
+          <AssociationSet Name="JobSchedule_JobScheduleDependency" Association="Self.JobSchedule_JobScheduleDependency">
+            <End Role="JobSchedule" EntitySet="JobSchedules" />
+            <End Role="JobScheduleDependency" EntitySet="JobScheduleDependencies" />
+          </AssociationSet>
+          <AssociationSet Name="JobSchedule_JobScheduleDependency_DependencyID" Association="Self.JobSchedule_JobScheduleDependency_DependencyID">
+            <End Role="JobSchedule" EntitySet="JobSchedules" />
+            <End Role="JobScheduleDependency" EntitySet="JobScheduleDependencies" />
+          </AssociationSet>
+          <AssociationSet Name="JobSchedule_JobScheduleLog" Association="Self.JobSchedule_JobScheduleLog">
+            <End Role="JobSchedule" EntitySet="JobSchedules" />
+            <End Role="JobScheduleLog" EntitySet="JobScheduleLogs" />
+          </AssociationSet>
+          <AssociationSet Name="JobSchedule_JobScheduleParameter" Association="Self.JobSchedule_JobScheduleParameter">
+            <End Role="JobSchedule" EntitySet="JobSchedules" />
+            <End Role="JobScheduleParameter" EntitySet="JobScheduleParameters" />
+          </AssociationSet>
+          <AssociationSet Name="JobScheduleChain_JobSchedule" Association="Self.JobScheduleChain_JobSchedule">
+            <End Role="JobScheduleChain" EntitySet="JobScheduleChains" />
+            <End Role="JobSchedule" EntitySet="JobSchedules" />
+          </AssociationSet>
+          <AssociationSet Name="JobScheduleMethod_JobSchedule" Association="Self.JobScheduleMethod_JobSchedule">
+            <End Role="JobScheduleMethod" EntitySet="JobScheduleMethods" />
+            <End Role="JobSchedule" EntitySet="JobSchedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobScheduleStamps_JobScheduleLog" Association="Self.FK_JobScheduleStamps_JobScheduleLog">
+            <End Role="JobScheduleLog" EntitySet="JobScheduleLogs" />
+            <End Role="JobScheduleStamp" EntitySet="JobScheduleStamps" />
+          </AssociationSet>
+          <AssociationSet Name="JobScheduleLog_JobScheduleLogItem" Association="Self.JobScheduleLog_JobScheduleLogItem">
+            <End Role="JobScheduleLog" EntitySet="JobScheduleLogs" />
+            <End Role="JobScheduleLogItem" EntitySet="JobScheduleLogItems" />
+          </AssociationSet>
+          <AssociationSet Name="JobScheduleLogStatus_JobScheduleLog" Association="Self.JobScheduleLogStatus_JobScheduleLog">
+            <End Role="JobScheduleLogStatus" EntitySet="JobScheduleLogStatus" />
+            <End Role="JobScheduleLog" EntitySet="JobScheduleLogs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InternshipTaskModelStoreContainer" CdmEntityContainer="InternshipTaskEntities">
+          <EntitySetMapping Name="JobSchedules">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobSchedule">
+              <MappingFragment StoreEntitySet="JobSchedule">
+                <ScalarProperty Name="JobScheduleId" ColumnName="JobScheduleId" />
+                <ScalarProperty Name="HostId" ColumnName="HostId" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="TimeFrom" ColumnName="TimeFrom" />
+                <ScalarProperty Name="TimeTo" ColumnName="TimeTo" />
+                <ScalarProperty Name="FrequencyTypeId" ColumnName="FrequencyTypeId" />
+                <ScalarProperty Name="FrequencyInterval" ColumnName="FrequencyInterval" />
+                <ScalarProperty Name="LastRun" ColumnName="LastRun" />
+                <ScalarProperty Name="DateId" ColumnName="DateId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="NameEng" ColumnName="NameEng" />
+                <ScalarProperty Name="JobScheduleMethodId" ColumnName="JobScheduleMethodId" />
+                <ScalarProperty Name="JobScheduleChainId" ColumnName="JobScheduleChainId" />
+                <ScalarProperty Name="Ordinal" ColumnName="Ordinal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobScheduleChains">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobScheduleChain">
+              <MappingFragment StoreEntitySet="JobScheduleChain">
+                <ScalarProperty Name="JobScheduleChainId" ColumnName="JobScheduleChainId" />
+                <ScalarProperty Name="JobScheduleChainCode" ColumnName="JobScheduleChainCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DescriptionEng" ColumnName="DescriptionEng" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobScheduleDependencies">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobScheduleDependency">
+              <MappingFragment StoreEntitySet="JobScheduleDependency">
+                <ScalarProperty Name="JobScheduleDependencyId" ColumnName="JobScheduleDependencyId" />
+                <ScalarProperty Name="JobScheduleId" ColumnName="JobScheduleId" />
+                <ScalarProperty Name="DependencyId" ColumnName="DependencyId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobScheduleLogs">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobScheduleLog">
+              <MappingFragment StoreEntitySet="JobScheduleLog">
+                <ScalarProperty Name="JobScheduleLogId" ColumnName="JobScheduleLogId" />
+                <ScalarProperty Name="JobScheduleId" ColumnName="JobScheduleId" />
+                <ScalarProperty Name="Started" ColumnName="Started" />
+                <ScalarProperty Name="Ended" ColumnName="Ended" />
+                <ScalarProperty Name="DateId" ColumnName="DateId" />
+                <ScalarProperty Name="HostId" ColumnName="HostId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="JobScheduleLogStatusId" ColumnName="JobScheduleLogStatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobScheduleLogItems">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobScheduleLogItem">
+              <MappingFragment StoreEntitySet="JobScheduleLogItem">
+                <ScalarProperty Name="JobScheduleLogItemId" ColumnName="JobScheduleLogItemId" />
+                <ScalarProperty Name="JobScheduleLogId" ColumnName="JobScheduleLogId" />
+                <ScalarProperty Name="Info" ColumnName="Info" />
+                <ScalarProperty Name="LogSeverityId" ColumnName="LogSeverityId" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobScheduleLogStatus">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobScheduleLogStatu">
+              <MappingFragment StoreEntitySet="JobScheduleLogStatus">
+                <ScalarProperty Name="JobScheduleLogStatusId" ColumnName="JobScheduleLogStatusId" />
+                <ScalarProperty Name="JobScheduleLogStatusCode" ColumnName="JobScheduleLogStatusCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DescriptionEng" ColumnName="DescriptionEng" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobScheduleMethods">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobScheduleMethod">
+              <MappingFragment StoreEntitySet="JobScheduleMethod">
+                <ScalarProperty Name="JobScheduleMethodId" ColumnName="JobScheduleMethodId" />
+                <ScalarProperty Name="MethodName" ColumnName="MethodName" />
+                <ScalarProperty Name="AssemblyName" ColumnName="AssemblyName" />
+                <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DescriptionEng" ColumnName="DescriptionEng" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobScheduleParameters">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobScheduleParameter">
+              <MappingFragment StoreEntitySet="JobScheduleParameter">
+                <ScalarProperty Name="JobScheduleParameterId" ColumnName="JobScheduleParameterId" />
+                <ScalarProperty Name="JobScheduleId" ColumnName="JobScheduleId" />
+                <ScalarProperty Name="ParameterName" ColumnName="ParameterName" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobScheduleStamps">
+            <EntityTypeMapping TypeName="InternshipTaskModel.JobScheduleStamp">
+              <MappingFragment StoreEntitySet="JobScheduleStamp">
+                <ScalarProperty Name="JobScheduleStampId" ColumnName="JobScheduleStampId" />
+                <ScalarProperty Name="JobScheduleId" ColumnName="JobScheduleId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ValueInt" ColumnName="ValueInt" />
+                <ScalarProperty Name="ValueInfo" ColumnName="ValueInfo" />
+                <ScalarProperty Name="ValueDate" ColumnName="ValueDate" />
+                <ScalarProperty Name="ValueBool" ColumnName="ValueBool" />
+                <ScalarProperty Name="JobScheduleLogId" ColumnName="JobScheduleLogId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
