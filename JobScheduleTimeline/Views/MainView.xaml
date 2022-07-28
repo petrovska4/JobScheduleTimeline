@@ -15,71 +15,81 @@
         <ViewModels:MainViewModel/>
     </UserControl.DataContext>
 
-    <Grid>
+    <Grid Background="#FFF3F9F7" >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Header="Filter">
+        <GroupBox Grid.Row="0" Header="Filter" BorderBrush="#FF56ED9E" Foreground="#FF269851">
             <Grid>
+                
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <Label Content="Start Date " VerticalAlignment="Stretch"/>
-                    <dxe:DateEdit x:Name="DateEditWithNavigatorAndTimePicker" MinWidth="100" Mask="G" MaskUseAsDisplayFormat="True">
-                        <dxe:DateEdit.StyleSettings>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Start Date " VerticalAlignment="Top" Margin="0,0,0,5" FontWeight="DemiBold" Foreground="#FF042F20"/>
+
+                <dxe:DateEdit x:Name="DateEditWithNavigatorAndTimePicker" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" MinWidth="200" HorizontalAlignment="Left" Mask="G" MaskUseAsDisplayFormat="True"
+                              EditValue="{Binding StartDateTime, Mode=TwoWay}" BorderBrush="#FF05805C" Foreground="#FF042F20">
+                       <dxe:DateEdit.StyleSettings>
                             <dxe:DateEditNavigatorWithTimePickerStyleSettings/>
-                        </dxe:DateEdit.StyleSettings>
-                    </dxe:DateEdit>
-                    <Label Content="End Date " Margin="15,0,0,0" VerticalAlignment="Stretch"/>
-                    <dxe:DateEdit x:Name="DateEditWithNavigatorAndTimePicker1" MinWidth="100" Mask="G" MaskUseAsDisplayFormat="True">
-                        <dxe:DateEdit.StyleSettings>
-                            <dxe:DateEditNavigatorWithTimePickerStyleSettings/>
-                        </dxe:DateEdit.StyleSettings>
-                    </dxe:DateEdit>
-                </StackPanel>
+                       </dxe:DateEdit.StyleSettings>
+                </dxe:DateEdit>
 
-                <Grid Grid.Row="1" Margin="0,10,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,5">
-                        <Label Content="Select Jobs "/>
-                        <dxe:ComboBoxEdit Grid.Row="1" IsReadOnly="False" IsTextEditable="False"  MinWidth="100">
-                            <dxe:ComboBoxEdit.StyleSettings>
-                                <dxe:CheckedComboBoxStyleSettings/>
-                            </dxe:ComboBoxEdit.StyleSettings>
-                            <dxe:ComboBoxEditItem Content="Item 1"/>
-                            <dxe:ComboBoxEditItem Content="Item 2"/>
-                            <dxe:ComboBoxEditItem Content="Item 3"/>
-                            <dxe:ComboBoxEditItem Content="Item 4"/>
-                        </dxe:ComboBoxEdit>
-                    </StackPanel>
+                <Label Grid.Column="2" Grid.Row="0" Content="End Date " VerticalAlignment="Top" FontWeight="DemiBold" Foreground="#FF042F20"/>
 
-                    <dx:SimpleButton Content="Search 🔎" MaxWidth="100" Grid.Row="1"/>
+                <dxe:DateEdit x:Name="DateEditWithNavigatorAndTimePicker1" Grid.Column="3" VerticalAlignment="Top" Grid.Row="0" MinWidth="200" HorizontalAlignment="Left" Mask="G" MaskUseAsDisplayFormat="True"
+                              EditValue="{Binding EndDateTime, Mode=TwoWay}" BorderBrush="#FF05805C" Foreground="#FF042F20">
+                    <dxe:DateEdit.StyleSettings>
+                        <dxe:DateEditNavigatorWithTimePickerStyleSettings/>
+                    </dxe:DateEdit.StyleSettings>
+                </dxe:DateEdit>
 
-                </Grid>
+                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" Margin="0,0,0,5" Content="Select Jobs " FontWeight="DemiBold" Foreground="#FF042F20"/>
+
+                <dxe:ComboBoxEdit Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" IsReadOnly="False" IsTextEditable="False" VerticalAlignment="Top" MinWidth="100" ItemsSource="{Binding JobScheduleList}"
+                                  DisplayMember="Name" 
+                                  ValueMember="JobScheduleId" 
+                                  EditValue="{Binding SelectedItems}"  BorderBrush="#FF05805C">
+                    
+                    <dxe:ComboBoxEdit.StyleSettings>
+                         <dxe:CheckedComboBoxStyleSettings/>
+                     </dxe:ComboBoxEdit.StyleSettings>
+                </dxe:ComboBoxEdit>
+
+                <dx:SimpleButton Grid.ColumnSpan="4" Grid.Row="2" Content="Search 🔎" FontWeight="DemiBold" FontSize="13" MaxWidth="100" Command="{Binding SearchCommand}" BorderBrush="#FF05805C" BorderThickness="2" Foreground="#FF042F20"/>
+
             </Grid>
+            
         </GroupBox>
 
-        <GroupBox Grid.Row="1" Header="Timetable">
-            <dxg:GridControl AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True" Grid.Row="1">
-                <dxg:GridControl.View>
-                    <dxg:TableView/>
+        <GroupBox Grid.Row="1" Header="Timetable" Background="#FFADF5D9" BorderBrush="#FF56ED9E" Foreground="#FF269851">
+            
+            <dxg:GridControl ItemsSource="{Binding Results}" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True" Grid.Row="1" OpacityMask="#FFBAF5D3">
+                <dxg:GridControl.View >
+                    <dxg:TableView />
                 </dxg:GridControl.View>
             </dxg:GridControl>
+            
         </GroupBox>
 
-        <GroupBox Grid.Row="2" Header="Timeline">
+        <GroupBox Grid.Row="2" Header="Timeline" BorderBrush="#FF56ED9E" Foreground="#FF269851">
+            
             <dxsch:SchedulerControl>
                 <dxsch:TimelineView x:Name="timelineView1"/>
             </dxsch:SchedulerControl>
+            
         </GroupBox>
 
     </Grid>

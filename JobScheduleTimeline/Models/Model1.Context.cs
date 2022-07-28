@@ -12,6 +12,8 @@ namespace JobScheduleTimeline.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class InternshipTaskEntities : DbContext
     {
@@ -34,5 +36,22 @@ namespace JobScheduleTimeline.Models
         public virtual DbSet<JobScheduleMethod> JobScheduleMethods { get; set; }
         public virtual DbSet<JobScheduleParameter> JobScheduleParameters { get; set; }
         public virtual DbSet<JobScheduleStamp> JobScheduleStamps { get; set; }
+    
+        public virtual ObjectResult<JobScheduleTimeline_Result> JobScheduleTimeline(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, string resourceIdsCSV)
+        {
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            var resourceIdsCSVParameter = resourceIdsCSV != null ?
+                new ObjectParameter("ResourceIdsCSV", resourceIdsCSV) :
+                new ObjectParameter("ResourceIdsCSV", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<JobScheduleTimeline_Result>("JobScheduleTimeline", startDateParameter, endDateParameter, resourceIdsCSVParameter);
+        }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="InternshipTaskModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="InternshipTaskModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="JobSchedule">
           <Key>
             <PropertyRef Name="JobScheduleId" />
@@ -230,6 +230,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="JobScheduleTimeline" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="ResourceIdsCSV" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="InternshipTaskModelStoreContainer">
           <EntitySet Name="JobSchedule" EntityType="Self.JobSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JobScheduleChain" EntityType="Self.JobScheduleChain" Schema="dbo" store:Type="Tables" />
@@ -281,8 +286,7 @@
             <End Role="JobSchedule" EntitySet="JobSchedule" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="InternshipTaskModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -581,7 +585,23 @@
             <End Role="JobScheduleLogStatus" EntitySet="JobScheduleLogStatus" />
             <End Role="JobScheduleLog" EntitySet="JobScheduleLogs" />
           </AssociationSet>
+          <FunctionImport Name="JobScheduleTimeline" ReturnType="Collection(InternshipTaskModel.JobScheduleTimeline_Result)">
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ResourceIdsCSV" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="JobScheduleTimeline_Result">
+          <Property Type="Int32" Name="JobScheduleId" Nullable="false" />
+          <Property Type="DateTime" Name="Started" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="Ended" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeFrom" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeTo" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Reccurance" Nullable="false" />
+          <Property Type="Int32" Name="FrequencyTypeId" Nullable="true" />
+          <Property Type="Int32" Name="FrequencyInterval" Nullable="true" />
+          <Property Type="String" Name="OccuranceType" Nullable="false" MaxLength="8" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -702,6 +722,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="JobScheduleTimeline" FunctionName="InternshipTaskModel.Store.JobScheduleTimeline">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="InternshipTaskModel.JobScheduleTimeline_Result">
+                <ScalarProperty Name="JobScheduleId" ColumnName="JobScheduleId" />
+                <ScalarProperty Name="Started" ColumnName="Started" />
+                <ScalarProperty Name="Ended" ColumnName="Ended" />
+                <ScalarProperty Name="TimeFrom" ColumnName="TimeFrom" />
+                <ScalarProperty Name="TimeTo" ColumnName="TimeTo" />
+                <ScalarProperty Name="Reccurance" ColumnName="Reccurance" />
+                <ScalarProperty Name="FrequencyTypeId" ColumnName="FrequencyTypeId" />
+                <ScalarProperty Name="FrequencyInterval" ColumnName="FrequencyInterval" />
+                <ScalarProperty Name="OccuranceType" ColumnName="OccuranceType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
