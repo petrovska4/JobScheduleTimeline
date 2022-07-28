@@ -68,8 +68,20 @@
                      </dxe:ComboBoxEdit.StyleSettings>
                 </dxe:ComboBoxEdit>
 
-                <dx:SimpleButton Grid.ColumnSpan="4" Grid.Row="2" Content="Search 🔎" FontWeight="DemiBold" FontSize="13" MaxWidth="100" Command="{Binding SearchCommand}" BorderBrush="#FF05805C" BorderThickness="2" Foreground="#FF042F20"/>
+                <Button x:Name="button" Grid.ColumnSpan="4" Grid.Row="2" FontWeight="DemiBold" FontSize="13" MaxWidth="100" Command="{Binding SearchCommand}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Border" TextBlock.Foreground="#FF042F20" BorderBrush="#FF058045" BorderThickness="2" CornerRadius="8"  Background="#FFB3E8CE">
+                                <Grid>
+                                    <TextBlock HorizontalAlignment="Center" FontWeight="DemiBold">
+                                        <Italic><Run Text="Search 🔎"/></Italic>
+                                    </TextBlock>  
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
 
+                </Button>
             </Grid>
             
         </GroupBox>
