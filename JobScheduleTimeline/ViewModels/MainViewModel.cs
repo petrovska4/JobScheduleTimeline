@@ -1,5 +1,6 @@
 ﻿using DevExpress.Mvvm;
 using DevExpress.Xpf.Editors;
+using DevExpress.Xpf.Grid;
 using JobScheduleTimeline.Models;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,17 @@ namespace JobScheduleTimeline.ViewModels
 
             Init();
 
+            FrqTypeList = new List<KeyValuePair<int, string>>();
+
+            FrqTypeList.Add(new KeyValuePair<int, string>(0, "Unknown"));
+            FrqTypeList.Add(new KeyValuePair<int, string>(1, "PerDay"));
+            FrqTypeList.Add(new KeyValuePair<int, string>(2, "Minutes"));
+            FrqTypeList.Add(new KeyValuePair<int, string>(3, "PerWeek"));
+            FrqTypeList.Add(new KeyValuePair<int, string>(4, "PerMonth"));
+
+
         }
+
 
         private void SelectedItemss_ListChanged(object sender, ListChangedEventArgs e)
         {
@@ -48,10 +59,12 @@ namespace JobScheduleTimeline.ViewModels
             Results = dbcontext.Database.SqlQuery<JobScheduleTimeline_Result>("EXEC [dbo].[JobScheduleTimeline] @StartDate , @EndDate , @ResourceIdsCSV", parameters).ToList();
 
             RaisePropertyChanged(nameof(Results));
+
+            
         }
 
-        public DelegateCommand SearchCommand { get; set; }
 
+        public DelegateCommand SearchCommand { get; set; }
         public InternshipTaskEntities dbcontext { get; private set; }
         public ObservableCollection<JobSchedule> JobScheduleList { get; private set; }
         public List<object> SelectedItems { get; set; }
@@ -65,5 +78,11 @@ namespace JobScheduleTimeline.ViewModels
             EndDateTime = DateTime.Now.AddDays(1);
         }
 
+        public List<KeyValuePair<int,string>>FrqTypeList { get; set; }
+        
+    }
+
+    public class KeyValuePair
+    {
     }
 }

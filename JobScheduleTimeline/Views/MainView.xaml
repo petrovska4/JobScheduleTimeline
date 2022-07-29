@@ -88,9 +88,64 @@
 
         <GroupBox Grid.Row="1" Header="Timetable" Background="#FFADF5D9" BorderBrush="#FF56ED9E" Foreground="#FF269851">
             
-            <dxg:GridControl ItemsSource="{Binding Results}" AutoGenerateColumns="AddNew" EnableSmartColumnsGeneration="True" Grid.Row="1" OpacityMask="#FFBAF5D3">
+            <dxg:GridControl ItemsSource="{Binding Results}" AutoGenerateColumns="None" EnableSmartColumnsGeneration="True" Grid.Row="1" OpacityMask="#FFBAF5D3">
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn Name="JobScheduleId" FieldName="JobScheduleId" Header="Job Schedule Id" ReadOnly="True" />
+                    <dxg:GridColumn Name="Description" FieldName="JobScheduleId" Header="Description" ReadOnly="True" >
+                        <dxg:GridColumn.CellTemplate>
+                            <DataTemplate>
+                                <dxe:ComboBoxEdit Name="PART_Editor" IsReadOnly="True" AllowDefaultButton="False" ItemsSource="{Binding DataContext.JobScheduleList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                  DisplayMember="Name" 
+                                  ValueMember="JobScheduleId">
+                                </dxe:ComboBoxEdit>
+                            </DataTemplate>
+                        </dxg:GridColumn.CellTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Name="Started" FieldName="Started" Header="Start" ReadOnly="True">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:DateEditSettings Mask="G" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Name="Ended" FieldName="Ended" Header="End" ReadOnly="True">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:DateEditSettings Mask="G" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Name="TimeFrom" FieldName="TimeFrom" Header="Time From" ReadOnly="True">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:DateEditSettings Mask="T" MaskUseAsDisplayFormat="True"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Name="TimeTo" FieldName="Timeto" Header="Time To" ReadOnly="True" />
+                    <dxg:GridColumn Name="Reccurance" FieldName="Reccurance" Header="Reccurance" ReadOnly="True" />
+                    <dxg:GridColumn Name="FrequencyTypeId" FieldName="FrequencyTypeId" Header="Frequency type Id" ReadOnly="True">
+                        <dxg:GridColumn.CellTemplate>
+                            <DataTemplate>
+                                <dxe:ComboBoxEdit Name="PART_Editor" IsReadOnly="True" AllowDefaultButton="False" ItemsSource="{Binding DataContext.FrqTypeList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                  ValueMember="Key"
+                                                  DisplayMember="Value">
+                                </dxe:ComboBoxEdit>
+                            </DataTemplate>
+                        </dxg:GridColumn.CellTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Name="FrequencyInterval" FieldName="FrequencyInterval" Header="Frequency Interval" ReadOnly="True" />
+                    <dxg:GridColumn Name="OccuranceType" FieldName="OccuranceType" Header="Occurance Type" ReadOnly="True" />
+                </dxg:GridControl.Columns>
                 <dxg:GridControl.View >
-                    <dxg:TableView />
+                    <dxg:TableView>
+                        <dxg:TableView.FormatConditions>
+                            <dxg:FormatCondition FieldName="Occurance Type" Expression="[OccuranceType]='Executed'" ApplyToRow="True" >
+                                <dxg:FormatCondition.Format>
+                                    <dx:Format Background="PaleGreen"/>
+                                </dxg:FormatCondition.Format>
+                            </dxg:FormatCondition>
+                            <dxg:FormatCondition FieldName="Occurance Type" Expression="[OccuranceType]='Planned'" ApplyToRow="True">
+                                <dxg:FormatCondition.Format>
+                                    <dx:Format Background="LightCyan"/>
+                                </dxg:FormatCondition.Format>
+                            </dxg:FormatCondition>
+                        </dxg:TableView.FormatConditions>
+                    </dxg:TableView>
                 </dxg:GridControl.View>
             </dxg:GridControl>
             
