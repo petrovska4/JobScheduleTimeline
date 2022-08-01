@@ -17,6 +17,8 @@ namespace JobScheduleTimeline.ViewModels
     {
         public MainViewModel()
         {
+            Appointments = new ObservableCollection<Appointment>();
+
             dbcontext = new InternshipTaskEntities();
 
             JobScheduleList = new ObservableCollection<JobSchedule>(dbcontext.JobSchedules);
@@ -35,6 +37,25 @@ namespace JobScheduleTimeline.ViewModels
             FrqTypeList.Add(new KeyValuePair<int, string>(3, "PerWeek"));
             FrqTypeList.Add(new KeyValuePair<int, string>(4, "PerMonth"));
 
+            //Appointments.Add(new Appointment()
+            //{
+            //    Id = 0,
+            //    StartTime = DateTime.Now.Date.AddHours(10),
+            //    EndTime = DateTime.Now.Date.AddHours(11),
+            //    PatientName = "Dave Muriel",
+            //    DoctorId = 5,
+            //    FirstVisit = true
+            //});
+
+            //Appointments.Add(new Appointment()
+            //{
+            //    Id = 1,
+            //    StartTime = DateTime.Now.Date.AddDays(1),
+            //    EndTime = DateTime.Now.Date.AddDays(2),
+            //    PatientName = "Dave2 Muriel2",
+            //    DoctorId = 6,
+            //    FirstVisit = false
+            //});
 
         }
 
@@ -58,19 +79,35 @@ namespace JobScheduleTimeline.ViewModels
 
             Results = dbcontext.Database.SqlQuery<JobScheduleTimeline_Result>("EXEC [dbo].[JobScheduleTimeline] @StartDate , @EndDate , @ResourceIdsCSV", parameters).ToList();
 
-            RaisePropertyChanged(nameof(Results));
+            Appointments.Clear();
+            int i = 0;
+            foreach (var item in Results)
+            {
+                Appointments.Add(new Appointment()
+                {
+                    Id = i++,
+                    StartTime = item.Started,
+                    EndTime = item.Ended,
+                    PatientName = JobScheduleList.FirstOrDefault(js=>js.JobScheduleId==item.JobScheduleId)?.Name,
+                    DoctorId = item.JobScheduleId,
+                    FirstVisit = false
+                });
+            }
 
-            
+            RaisePropertyChanged(nameof(Results));
+            RaisePropertyChanged(nameof(Appointments));
         }
 
 
         public DelegateCommand SearchCommand { get; set; }
+        public ObservableCollection<Appointment> Appointments { get; set; }
         public InternshipTaskEntities dbcontext { get; private set; }
         public ObservableCollection<JobSchedule> JobScheduleList { get; private set; }
         public List<object> SelectedItems { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public List<JobScheduleTimeline_Result> Results { get; set; }
+
 
         public void Init()
         {
@@ -85,4 +122,14 @@ namespace JobScheduleTimeline.ViewModels
     public class KeyValuePair
     {
     }
+
+    public class Appointment {
+        public virtual int Id { get; set; }
+        public virtual DateTime StartTime { get; set; }
+        public virtual DateTime? EndTime { get; set; }
+        public virtual string PatientName { get; set; }
+        public virtual int? DoctorId { get; set; }
+        public virtual bool FirstVisit { get; set; }
+    }
+
 }

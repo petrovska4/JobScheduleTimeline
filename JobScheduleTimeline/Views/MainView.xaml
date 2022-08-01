@@ -19,12 +19,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
+
 
         <GroupBox Grid.Row="0" Header="Filter" BorderBrush="#FF56ED9E" Foreground="#FF269851">
             <Grid>
-                
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
@@ -42,9 +42,9 @@
 
                 <dxe:DateEdit x:Name="DateEditWithNavigatorAndTimePicker" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" MinWidth="200" HorizontalAlignment="Left" Mask="G" MaskUseAsDisplayFormat="True"
                               EditValue="{Binding StartDateTime, Mode=TwoWay}" BorderBrush="#FF05805C" Foreground="#FF042F20">
-                       <dxe:DateEdit.StyleSettings>
-                            <dxe:DateEditNavigatorWithTimePickerStyleSettings/>
-                       </dxe:DateEdit.StyleSettings>
+                    <dxe:DateEdit.StyleSettings>
+                        <dxe:DateEditNavigatorWithTimePickerStyleSettings/>
+                    </dxe:DateEdit.StyleSettings>
                 </dxe:DateEdit>
 
                 <Label Grid.Column="2" Grid.Row="0" Content="End Date " VerticalAlignment="Top" FontWeight="DemiBold" Foreground="#FF042F20"/>
@@ -62,10 +62,10 @@
                                   DisplayMember="Name" 
                                   ValueMember="JobScheduleId" 
                                   EditValue="{Binding SelectedItems}"  BorderBrush="#FF05805C">
-                    
+
                     <dxe:ComboBoxEdit.StyleSettings>
-                         <dxe:CheckedComboBoxStyleSettings/>
-                     </dxe:ComboBoxEdit.StyleSettings>
+                        <dxe:CheckedComboBoxStyleSettings/>
+                    </dxe:ComboBoxEdit.StyleSettings>
                 </dxe:ComboBoxEdit>
 
                 <Button x:Name="button" Grid.ColumnSpan="4" Grid.Row="2" FontWeight="DemiBold" FontSize="13" MaxWidth="100" Command="{Binding SearchCommand}">
@@ -75,7 +75,7 @@
                                 <Grid>
                                     <TextBlock HorizontalAlignment="Center" FontWeight="DemiBold">
                                         <Italic><Run Text="Search 🔎"/></Italic>
-                                    </TextBlock>  
+                                    </TextBlock>
                                 </Grid>
                             </Border>
                         </ControlTemplate>
@@ -83,81 +83,105 @@
 
                 </Button>
             </Grid>
-            
         </GroupBox>
 
-        <GroupBox Grid.Row="1" Header="Timetable" Background="#FFADF5D9" BorderBrush="#FF56ED9E" Foreground="#FF269851">
-            
-            <dxg:GridControl ItemsSource="{Binding Results}" AutoGenerateColumns="None" EnableSmartColumnsGeneration="True" Grid.Row="1" OpacityMask="#FFBAF5D3">
-                <dxg:GridControl.Columns>
-                    <dxg:GridColumn Name="JobScheduleId" FieldName="JobScheduleId" Header="Job Schedule Id" ReadOnly="True" />
-                    <dxg:GridColumn Name="Description" FieldName="JobScheduleId" Header="Description" ReadOnly="True" >
-                        <dxg:GridColumn.CellTemplate>
-                            <DataTemplate>
-                                <dxe:ComboBoxEdit Name="PART_Editor" IsReadOnly="True" AllowDefaultButton="False" ItemsSource="{Binding DataContext.JobScheduleList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+        <TabControl Grid.Row="1">
+
+            <TabItem Header="Timetable" Background="#FFADF5D9" BorderBrush="#FF56ED9E" Foreground="#FF269851">
+
+                <dxg:GridControl ItemsSource="{Binding Results}" AutoGenerateColumns="None" EnableSmartColumnsGeneration="True" Grid.Row="1" OpacityMask="#FFBAF5D3">
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn Name="JobScheduleId" FieldName="JobScheduleId" Header="Job Schedule Id" ReadOnly="True" />
+                        <dxg:GridColumn Name="Description" FieldName="JobScheduleId" Header="Description" ReadOnly="True" >
+                            <dxg:GridColumn.CellTemplate>
+                                <DataTemplate>
+                                    <dxe:ComboBoxEdit Name="PART_Editor" IsReadOnly="True" AllowDefaultButton="False" ItemsSource="{Binding DataContext.JobScheduleList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                   DisplayMember="Name" 
                                   ValueMember="JobScheduleId">
-                                </dxe:ComboBoxEdit>
-                            </DataTemplate>
-                        </dxg:GridColumn.CellTemplate>
-                    </dxg:GridColumn>
-                    <dxg:GridColumn Name="Started" FieldName="Started" Header="Start" ReadOnly="True">
-                        <dxg:GridColumn.EditSettings>
-                            <dxe:DateEditSettings Mask="G" MaskUseAsDisplayFormat="True"/>
-                        </dxg:GridColumn.EditSettings>
-                    </dxg:GridColumn>
-                    <dxg:GridColumn Name="Ended" FieldName="Ended" Header="End" ReadOnly="True">
-                        <dxg:GridColumn.EditSettings>
-                            <dxe:DateEditSettings Mask="G" MaskUseAsDisplayFormat="True"/>
-                        </dxg:GridColumn.EditSettings>
-                    </dxg:GridColumn>
-                    <dxg:GridColumn Name="TimeFrom" FieldName="TimeFrom" Header="Time From" ReadOnly="True">
-                        <dxg:GridColumn.EditSettings>
-                            <dxe:DateEditSettings Mask="T" MaskUseAsDisplayFormat="True"/>
-                        </dxg:GridColumn.EditSettings>
-                    </dxg:GridColumn>
-                    <dxg:GridColumn Name="TimeTo" FieldName="Timeto" Header="Time To" ReadOnly="True" />
-                    <dxg:GridColumn Name="Reccurance" FieldName="Reccurance" Header="Reccurance" ReadOnly="True" />
-                    <dxg:GridColumn Name="FrequencyTypeId" FieldName="FrequencyTypeId" Header="Frequency type Id" ReadOnly="True">
-                        <dxg:GridColumn.CellTemplate>
-                            <DataTemplate>
-                                <dxe:ComboBoxEdit Name="PART_Editor" IsReadOnly="True" AllowDefaultButton="False" ItemsSource="{Binding DataContext.FrqTypeList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                    </dxe:ComboBoxEdit>
+                                </DataTemplate>
+                            </dxg:GridColumn.CellTemplate>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="Started" FieldName="Started" Header="Start" ReadOnly="True">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:DateEditSettings Mask="G" MaskUseAsDisplayFormat="True"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="Ended" FieldName="Ended" Header="End" ReadOnly="True">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:DateEditSettings Mask="G" MaskUseAsDisplayFormat="True"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="TimeFrom" FieldName="TimeFrom" Header="Time From" ReadOnly="True">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:DateEditSettings Mask="T" MaskUseAsDisplayFormat="True"/>
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="TimeTo" FieldName="Timeto" Header="Time To" ReadOnly="True" />
+                        <dxg:GridColumn Name="Reccurance" FieldName="Reccurance" Header="Reccurance" ReadOnly="True" />
+                        <dxg:GridColumn Name="FrequencyTypeId" FieldName="FrequencyTypeId" Header="Frequency type Id" ReadOnly="True">
+                            <dxg:GridColumn.CellTemplate>
+                                <DataTemplate>
+                                    <dxe:ComboBoxEdit Name="PART_Editor" IsReadOnly="True" AllowDefaultButton="False" ItemsSource="{Binding DataContext.FrqTypeList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                                   ValueMember="Key"
                                                   DisplayMember="Value">
-                                </dxe:ComboBoxEdit>
-                            </DataTemplate>
-                        </dxg:GridColumn.CellTemplate>
-                    </dxg:GridColumn>
-                    <dxg:GridColumn Name="FrequencyInterval" FieldName="FrequencyInterval" Header="Frequency Interval" ReadOnly="True" />
-                    <dxg:GridColumn Name="OccuranceType" FieldName="OccuranceType" Header="Occurance Type" ReadOnly="True" />
-                </dxg:GridControl.Columns>
-                <dxg:GridControl.View >
-                    <dxg:TableView>
-                        <dxg:TableView.FormatConditions>
-                            <dxg:FormatCondition FieldName="Occurance Type" Expression="[OccuranceType]='Executed'" ApplyToRow="True" >
-                                <dxg:FormatCondition.Format>
-                                    <dx:Format Background="PaleGreen"/>
-                                </dxg:FormatCondition.Format>
-                            </dxg:FormatCondition>
-                            <dxg:FormatCondition FieldName="Occurance Type" Expression="[OccuranceType]='Planned'" ApplyToRow="True">
-                                <dxg:FormatCondition.Format>
-                                    <dx:Format Background="LightCyan"/>
-                                </dxg:FormatCondition.Format>
-                            </dxg:FormatCondition>
-                        </dxg:TableView.FormatConditions>
-                    </dxg:TableView>
-                </dxg:GridControl.View>
-            </dxg:GridControl>
-            
-        </GroupBox>
+                                    </dxe:ComboBoxEdit>
+                                </DataTemplate>
+                            </dxg:GridColumn.CellTemplate>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn Name="FrequencyInterval" FieldName="FrequencyInterval" Header="Frequency Interval" ReadOnly="True" />
+                        <dxg:GridColumn Name="OccuranceType" FieldName="OccuranceType" Header="Occurance Type" ReadOnly="True" />
+                    </dxg:GridControl.Columns>
+                    <dxg:GridControl.View >
+                        <dxg:TableView>
+                            <dxg:TableView.FormatConditions>
+                                <dxg:FormatCondition FieldName="Occurance Type" Expression="[OccuranceType]='Executed'" ApplyToRow="True" >
+                                    <dxg:FormatCondition.Format>
+                                        <dx:Format Background="PaleGreen"/>
+                                    </dxg:FormatCondition.Format>
+                                </dxg:FormatCondition>
+                                <dxg:FormatCondition FieldName="Occurance Type" Expression="[OccuranceType]='Planned'" ApplyToRow="True">
+                                    <dxg:FormatCondition.Format>
+                                        <dx:Format Background="LightCyan"/>
+                                    </dxg:FormatCondition.Format>
+                                </dxg:FormatCondition>
+                            </dxg:TableView.FormatConditions>
+                        </dxg:TableView>
+                    </dxg:GridControl.View>
+                </dxg:GridControl>
 
-        <GroupBox Grid.Row="2" Header="Timeline" BorderBrush="#FF56ED9E" Foreground="#FF269851">
-            
-            <dxsch:SchedulerControl>
-                <dxsch:TimelineView x:Name="timelineView1"/>
-            </dxsch:SchedulerControl>
-            
-        </GroupBox>
+            </TabItem>
+
+            <TabItem Header="Timeline" BorderBrush="#FF56ED9E" Foreground="#FF269851">
+
+                <dxsch:SchedulerControl GroupType="Resource" x:Name="scheduler" >
+                    
+                    <dxsch:TimelineView x:Name="timeneView"/>
+
+                    <dxsch:SchedulerControl.DataSource>
+                        <dxsch:DataSource ResourcesSource="{Binding JobScheduleList}" AppointmentsSource="{Binding Appointments}">
+                            <dxsch:DataSource.ResourceMappings>
+                                <dxsch:ResourceMappings Caption="Name" Id="JobScheduleId"/>
+                            </dxsch:DataSource.ResourceMappings>
+                            <dxsch:DataSource.AppointmentMappings>
+                                <dxsch:AppointmentMappings 
+                                        Start="StartTime"
+                                        Subject="PatientName"
+                                        ResourceId="DoctorId"
+                                        Id="Id"
+                                        End="EndTime">
+                                    <dxsch:CustomFieldMapping Mapping="FirstVisit" Name="FirstVisit"/>
+                                </dxsch:AppointmentMappings>
+                            </dxsch:DataSource.AppointmentMappings>
+                        </dxsch:DataSource>
+                    </dxsch:SchedulerControl.DataSource>
+                </dxsch:SchedulerControl>
+
+            </TabItem>
+
+        </TabControl>
+
+        
 
     </Grid>
 
