@@ -1,4 +1,7 @@
 ﻿using DevExpress.Mvvm;
+using DevExpress.Mvvm.DataAnnotations;
+using DevExpress.Xpf.Scheduling;
+using DevExpress.XtraScheduler;
 using DevExpress.Xpf.Editors;
 using DevExpress.Xpf.Grid;
 using JobScheduleTimeline.Models;
@@ -37,25 +40,6 @@ namespace JobScheduleTimeline.ViewModels
             FrqTypeList.Add(new KeyValuePair<int, string>(3, "PerWeek"));
             FrqTypeList.Add(new KeyValuePair<int, string>(4, "PerMonth"));
 
-            //Appointments.Add(new Appointment()
-            //{
-            //    Id = 0,
-            //    StartTime = DateTime.Now.Date.AddHours(10),
-            //    EndTime = DateTime.Now.Date.AddHours(11),
-            //    PatientName = "Dave Muriel",
-            //    DoctorId = 5,
-            //    FirstVisit = true
-            //});
-
-            //Appointments.Add(new Appointment()
-            //{
-            //    Id = 1,
-            //    StartTime = DateTime.Now.Date.AddDays(1),
-            //    EndTime = DateTime.Now.Date.AddDays(2),
-            //    PatientName = "Dave2 Muriel2",
-            //    DoctorId = 6,
-            //    FirstVisit = false
-            //});
 
         }
 
@@ -83,31 +67,64 @@ namespace JobScheduleTimeline.ViewModels
             int i = 0;
             foreach (var item in Results)
             {
-                Appointments.Add(new Appointment()
+                var appt = CreateAppt(ref i, item);
+
+                Appointment apt = CreateAppointment(AppointmentType.Pattern);
+                apt.Id = i++;
+                apt.StartTime = item.Started;
+                apt.EndTime = item.Ended;
+                apt.PatientName = JobScheduleList.FirstOrDefault(js => js.JobScheduleId == item.JobScheduleId)?.Name;
+                apt.DoctorId = item.JobScheduleId;
+                apt.Recurrence = item.Reccurance;
+                apt.FrequencyType = item.FrequencyTypeId;
+                apt.FrequencyInterval = item.FrequencyInterval;
+
+                if (appt.Recurrence == 1)
                 {
-                    Id = i++,
-                    StartTime = item.Started,
-                    EndTime = item.Ended,
-                    PatientName = JobScheduleList.FirstOrDefault(js=>js.JobScheduleId==item.JobScheduleId)?.Name,
-                    DoctorId = item.JobScheduleId,
-                    FirstVisit = false
-                });
+                    appt.AppointmentType = AppointmentType.Pattern;
+
+                    appt.RecurrenceInfo.Type = RecurrenceType.Minutely;
+                    apt.RecurrenceInfo= new RecurrenceInfo();
+
+                }
+
+                Appointments.Add(appt);
             }
 
             RaisePropertyChanged(nameof(Results));
             RaisePropertyChanged(nameof(Appointments));
         }
 
+        private Appointment CreateAppointment(AppointmentType pattern)
+        {
+            return new Appointment();
+        }
+
+        private Appointment CreateAppt(ref int i, JobScheduleTimeline_Result item)
+        {
+            return new Appointment()
+            {
+                Id = i++,
+                StartTime = item.Started,
+                EndTime = item.Ended,
+                PatientName = JobScheduleList.FirstOrDefault(js => js.JobScheduleId == item.JobScheduleId)?.Name,
+                DoctorId = item.JobScheduleId,
+                Recurrence = item.Reccurance,
+                FrequencyType = item.FrequencyTypeId,
+                FrequencyInterval = item.FrequencyInterval
+            };
+        }
+
 
         public DelegateCommand SearchCommand { get; set; }
         public ObservableCollection<Appointment> Appointments { get; set; }
+        public ObservableCollection<Appointment> SelectedAppointments { get; set; }
         public InternshipTaskEntities dbcontext { get; private set; }
         public ObservableCollection<JobSchedule> JobScheduleList { get; private set; }
         public List<object> SelectedItems { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public List<JobScheduleTimeline_Result> Results { get; set; }
-
 
         public void Init()
         {
@@ -129,7 +146,12 @@ namespace JobScheduleTimeline.ViewModels
         public virtual DateTime? EndTime { get; set; }
         public virtual string PatientName { get; set; }
         public virtual int? DoctorId { get; set; }
-        public virtual bool FirstVisit { get; set; }
+        public virtual int Recurrence { get; set; }
+        public int? FrequencyType { get; set; }
+        public int? FrequencyInterval { get; set; }
+        public string RecurrenceRule { get; internal set; }
+        public AppointmentType AppointmentType { get; internal set; }
+        public object RecurrenceInfo { get; internal set; }
     }
 
 }

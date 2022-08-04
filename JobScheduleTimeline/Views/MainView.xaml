@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
 
 
-        <GroupBox Grid.Row="0" Header="Filter" BorderBrush="#FF56ED9E" Foreground="#FF269851">
+        <GroupBox Grid.Row="0" Header="Filter" BorderBrush="#FF56ED9E" Foreground="#FF269851" >
             <Grid>
 
                 <Grid.RowDefinitions>
@@ -137,7 +137,7 @@
                             <dxg:TableView.FormatConditions>
                                 <dxg:FormatCondition FieldName="Occurance Type" Expression="[OccuranceType]='Executed'" ApplyToRow="True" >
                                     <dxg:FormatCondition.Format>
-                                        <dx:Format Background="PaleGreen"/>
+                                        <dx:Format Background="#FFCCFDD1"/>
                                     </dxg:FormatCondition.Format>
                                 </dxg:FormatCondition>
                                 <dxg:FormatCondition FieldName="Occurance Type" Expression="[OccuranceType]='Planned'" ApplyToRow="True">
@@ -154,8 +154,8 @@
 
             <TabItem Header="Timeline" BorderBrush="#FF56ED9E" Foreground="#FF269851">
 
-                <dxsch:SchedulerControl GroupType="Resource" x:Name="scheduler" >
-                    
+                <dxsch:SchedulerControl GroupType="Resource" x:Name="scheduler" SelectedInterval="{Binding Interval, Mode=TwoWay}">
+
                     <dxsch:TimelineView x:Name="timeneView"/>
 
                     <dxsch:SchedulerControl.DataSource>
@@ -169,8 +169,8 @@
                                         Subject="PatientName"
                                         ResourceId="DoctorId"
                                         Id="Id"
-                                        End="EndTime">
-                                    <dxsch:CustomFieldMapping Mapping="FirstVisit" Name="FirstVisit"/>
+                                        End="EndTime"
+                                        RecurrenceInfo="RecurrenceInfo">
                                 </dxsch:AppointmentMappings>
                             </dxsch:DataSource.AppointmentMappings>
                         </dxsch:DataSource>
