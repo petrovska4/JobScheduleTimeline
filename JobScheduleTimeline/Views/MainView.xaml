@@ -154,7 +154,7 @@
 
             <TabItem Header="Timeline" BorderBrush="#FF56ED9E" Foreground="#FF269851">
 
-                <dxsch:SchedulerControl GroupType="Resource" x:Name="scheduler" SelectedInterval="{Binding Interval, Mode=TwoWay}">
+                <dxsch:SchedulerControl GroupType="Resource" x:Name="scheduler">
 
                     <dxsch:TimelineView x:Name="timeneView"/>
 
@@ -170,7 +170,8 @@
                                         ResourceId="DoctorId"
                                         Id="Id"
                                         End="EndTime"
-                                        RecurrenceInfo="RecurrenceInfo">
+                                        RecurrenceInfo="RecurrenceInfo"
+                                        Type="AppointmentType">
                                 </dxsch:AppointmentMappings>
                             </dxsch:DataSource.AppointmentMappings>
                         </dxsch:DataSource>

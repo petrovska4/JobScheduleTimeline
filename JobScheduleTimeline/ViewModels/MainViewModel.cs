@@ -40,7 +40,6 @@ namespace JobScheduleTimeline.ViewModels
             FrqTypeList.Add(new KeyValuePair<int, string>(3, "PerWeek"));
             FrqTypeList.Add(new KeyValuePair<int, string>(4, "PerMonth"));
 
-
         }
 
 
@@ -64,57 +63,130 @@ namespace JobScheduleTimeline.ViewModels
             Results = dbcontext.Database.SqlQuery<JobScheduleTimeline_Result>("EXEC [dbo].[JobScheduleTimeline] @StartDate , @EndDate , @ResourceIdsCSV", parameters).ToList();
 
             Appointments.Clear();
-            int i = 0;
+            
             foreach (var item in Results)
             {
-                var appt = CreateAppt(ref i, item);
 
-                Appointment apt = CreateAppointment(AppointmentType.Pattern);
-                apt.Id = i++;
-                apt.StartTime = item.Started;
-                apt.EndTime = item.Ended;
-                apt.PatientName = JobScheduleList.FirstOrDefault(js => js.JobScheduleId == item.JobScheduleId)?.Name;
-                apt.DoctorId = item.JobScheduleId;
-                apt.Recurrence = item.Reccurance;
-                apt.FrequencyType = item.FrequencyTypeId;
-                apt.FrequencyInterval = item.FrequencyInterval;
+                if (!item.FrequencyInterval.HasValue && item.Reccurance==1 && !item.TimeFrom.HasValue)
+                    continue;
 
-                if (appt.Recurrence == 1)
+                Appointment pattern = new Appointment()
                 {
-                    appt.AppointmentType = AppointmentType.Pattern;
+                    StartTime = item.Started,
+                    EndTime = item.Ended,
+                    TimeFrom = item.TimeFrom,
+                    TimeTo = item.TimeTo,
+                    PatientName = JobScheduleList.FirstOrDefault(js => js.JobScheduleId == item.JobScheduleId)?.Name,
+                    DoctorId = item.JobScheduleId,
+                    Recurrence = item.Reccurance,
+                    FrequencyType = item.FrequencyTypeId,
+                    FrequencyInterval = item.FrequencyInterval
+                };
 
-                    appt.RecurrenceInfo.Type = RecurrenceType.Minutely;
-                    apt.RecurrenceInfo= new RecurrenceInfo();
+                if (pattern.Recurrence == 1)
+                {
+                    if (!item.TimeFrom.HasValue)
+                        continue;
 
+                    DateTime StartDate = new DateTime(pattern.StartTime.Year,pattern.StartTime.Month,pattern.StartTime.Day, pattern.TimeFrom.Value.Hour, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
+
+
+
+                    pattern.AppointmentType = AppointmentType.Pattern;
+                    
+                    if (pattern.FrequencyType == 0)
+                    {
+                        //Frequency unknown
+                        continue;
+                    }
+                    if (pattern.FrequencyType == 1)
+                    {
+                        //Frequency perday
+                        if(StartDate.Hour < DateTime.Now.Hour)
+                        {
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Daily(StartDate.AddDays(1)).Build();
+                            pattern.RecurrenceInfo = info.ToXml();
+                        }
+                        else
+                        {
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Daily(StartDate).Build();
+                            pattern.RecurrenceInfo = info.ToXml();
+                        }                        
+                    }
+                    if (pattern.FrequencyType == 2)
+                    {
+                        //Frequency minutes
+
+                        if(StartDate.Hour < DateTime.Now.Hour)
+                        {
+                            //int pom2 = pattern.TimeFrom.Value.Hour;
+                            //while (pom2 < DateTime.Now.Hour)
+                            //{
+                            //    pom2 += (int)pattern.FrequencyInterval / 60;
+                            //}
+
+                            //int pom=DateTime.Now.Hour-pom2;
+
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Minutely(StartDate.AddHours(DateTime.Now.Hour- pattern.TimeFrom.Value.Hour)).Build();
+                            info.Periodicity = (int)pattern.FrequencyInterval;
+                            pattern.RecurrenceInfo = info.ToXml();
+                        }
+                        else
+                        {
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Minutely(StartDate).Build();
+                            info.Periodicity = (int)pattern.FrequencyInterval;
+                            pattern.RecurrenceInfo = info.ToXml();
+                        }
+
+
+                        //int pom2 = pattern.TimeFrom.Value.Hour;
+                        //while (pom2 < DateTime.Now.Hour)
+                        //{
+                        //    pom2 += (int)pattern.FrequencyInterval / 60;
+                        //}
+                        //DateTime pom = new DateTime(pattern.StartTime.Year, pattern.StartTime.Month, pattern.StartTime.Day, pom2, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
+                        //RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Minutely(pom).Build();
+                        //info.Periodicity = (int)pattern.FrequencyInterval;
+                        //pattern.RecurrenceInfo = info.ToXml();
+
+                    }
+                    if (pattern.FrequencyType == 3)
+                    {
+                        //Frequency perweek
+                        if(StartDate.Hour < DateTime.Now.Hour)
+                        {
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Weekly(StartDate.AddDays(7), (int)pattern.FrequencyInterval).Build();
+                            pattern.RecurrenceInfo = info.ToXml();
+                        }
+                        else
+                        {
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Weekly(StartDate, (int)pattern.FrequencyInterval).Build();
+                            pattern.RecurrenceInfo = info.ToXml();
+                        }
+                        
+                    }
+                    if (pattern.FrequencyType == 4)
+                    {
+                        //Frequency permonth
+                        if (StartDate.Hour < DateTime.Now.Hour)
+                        {
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Monthly(StartDate.AddMonths(1), (int)pattern.FrequencyInterval).Build();
+                            pattern.RecurrenceInfo = info.ToXml();
+                        }
+                        else
+                        {
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Monthly(StartDate, (int)pattern.FrequencyInterval).Build();
+                            pattern.RecurrenceInfo = info.ToXml();
+                        }
+                    }
                 }
 
-                Appointments.Add(appt);
+                Appointments.Add(pattern);
             }
 
             RaisePropertyChanged(nameof(Results));
             RaisePropertyChanged(nameof(Appointments));
         }
-
-        private Appointment CreateAppointment(AppointmentType pattern)
-        {
-            return new Appointment();
-        }
-
-        private Appointment CreateAppt(ref int i, JobScheduleTimeline_Result item)
-        {
-            return new Appointment()
-            {
-                Id = i++,
-                StartTime = item.Started,
-                EndTime = item.Ended,
-                PatientName = JobScheduleList.FirstOrDefault(js => js.JobScheduleId == item.JobScheduleId)?.Name,
-                DoctorId = item.JobScheduleId,
-                Recurrence = item.Reccurance,
-                FrequencyType = item.FrequencyTypeId,
-                FrequencyInterval = item.FrequencyInterval
-            };
-        }
-
 
         public DelegateCommand SearchCommand { get; set; }
         public ObservableCollection<Appointment> Appointments { get; set; }
@@ -149,9 +221,11 @@ namespace JobScheduleTimeline.ViewModels
         public virtual int Recurrence { get; set; }
         public int? FrequencyType { get; set; }
         public int? FrequencyInterval { get; set; }
-        public string RecurrenceRule { get; internal set; }
         public AppointmentType AppointmentType { get; internal set; }
-        public object RecurrenceInfo { get; internal set; }
+        public string RecurrenceInfo { get; internal set; }
+        public DateTime PatternTime { get; internal set; }
+        public DateTime? TimeFrom { get; internal set; }
+        public DateTime? TimeTo { get; internal set; }
     }
 
 }
