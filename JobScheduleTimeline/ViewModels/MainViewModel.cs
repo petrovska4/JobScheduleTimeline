@@ -117,19 +117,16 @@ namespace JobScheduleTimeline.ViewModels
                     {
                         //Frequency minutes
 
-                        if(StartDate.Hour < DateTime.Now.Hour)
+                        if(StartDate< DateTime.Now)
                         {
-                            //int pom2 = pattern.TimeFrom.Value.Hour;
-                            //while (pom2 < DateTime.Now.Hour)
-                            //{
-                            //    pom2 += (int)pattern.FrequencyInterval / 60;
-                            //}
+                            double pom1 = (double)((int)((DateTime.Now - StartDate).TotalMinutes / pattern.FrequencyInterval) + 1);
 
-                            //int pom=DateTime.Now.Hour-pom2;
+                            DateTime pom = StartDate.AddMinutes((double)pattern.FrequencyInterval *pom1);
 
-                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Minutely(StartDate.AddHours(DateTime.Now.Hour- pattern.TimeFrom.Value.Hour)).Build();
+                            RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Minutely(pom).Build();
                             info.Periodicity = (int)pattern.FrequencyInterval;
                             pattern.RecurrenceInfo = info.ToXml();
+
                         }
                         else
                         {
@@ -138,16 +135,6 @@ namespace JobScheduleTimeline.ViewModels
                             pattern.RecurrenceInfo = info.ToXml();
                         }
 
-
-                        //int pom2 = pattern.TimeFrom.Value.Hour;
-                        //while (pom2 < DateTime.Now.Hour)
-                        //{
-                        //    pom2 += (int)pattern.FrequencyInterval / 60;
-                        //}
-                        //DateTime pom = new DateTime(pattern.StartTime.Year, pattern.StartTime.Month, pattern.StartTime.Day, pom2, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
-                        //RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Minutely(pom).Build();
-                        //info.Periodicity = (int)pattern.FrequencyInterval;
-                        //pattern.RecurrenceInfo = info.ToXml();
 
                     }
                     if (pattern.FrequencyType == 3)

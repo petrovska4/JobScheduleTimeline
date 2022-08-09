@@ -154,9 +154,15 @@
 
             <TabItem Header="Timeline" BorderBrush="#FF56ED9E" Foreground="#FF269851">
 
-                <dxsch:SchedulerControl GroupType="Resource" x:Name="scheduler">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                    <dxsch:TimelineView x:Name="timeneView"/>
+                    <dxsch:SchedulerControl ActiveViewType="TimelineView" Grid.Column="0" GroupType="Resource" x:Name="scheduler" ShowBorder="True">
+
+                    <dxsch:TimelineView x:Name="timelineView" AppointmentMinHeight="50" />
 
                     <dxsch:SchedulerControl.DataSource>
                         <dxsch:DataSource ResourcesSource="{Binding JobScheduleList}" AppointmentsSource="{Binding Appointments}">
@@ -177,6 +183,31 @@
                         </dxsch:DataSource>
                     </dxsch:SchedulerControl.DataSource>
                 </dxsch:SchedulerControl>
+
+                <dxe:DateNavigator Grid.Column="1" x:Name="dateNavigator" IsMultiSelect="True" HighlightHolidays="True" >
+                    <dxe:DateNavigator.StyleSettings>
+                        <dxsch:SchedulerDateNavigatorStyleSettings Scheduler="{Binding ElementName=timelineView}" />
+                    </dxe:DateNavigator.StyleSettings>
+                    
+
+                        <dxe:DateNavigator.Appearance>
+                            <dxe:DateNavigatorCellAppearance>
+                                <dxe:DateNavigatorCellAppearance.NormalState>
+                                    <dxe:DateNavigatorStateAppearance Foreground="Black" Background="LightBlue" />
+                                </dxe:DateNavigatorCellAppearance.NormalState>
+                                <dxe:DateNavigatorCellAppearance.MouseOverState>
+                                    <dxe:DateNavigatorStateAppearance Foreground="MintCream" Background="LightGreen" />
+                                </dxe:DateNavigatorCellAppearance.MouseOverState>
+                                <dxe:DateNavigatorCellAppearance.SpecialDateState>
+                                    <dxe:DateNavigatorStateAppearance Foreground="Black" Background="LightBlue" CornerRadius="5"/>
+                                </dxe:DateNavigatorCellAppearance.SpecialDateState>
+                            </dxe:DateNavigatorCellAppearance>
+                        </dxe:DateNavigator.Appearance>
+                    </dxe:DateNavigator>
+                 
+                
+                
+                </Grid>
 
             </TabItem>
 
