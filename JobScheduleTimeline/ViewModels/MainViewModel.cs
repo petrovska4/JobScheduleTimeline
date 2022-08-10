@@ -13,6 +13,8 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
+using DevExpress.Mvvm.POCO;
+using System.Windows.Media;
 
 namespace JobScheduleTimeline.ViewModels
 {
@@ -25,6 +27,10 @@ namespace JobScheduleTimeline.ViewModels
             dbcontext = new InternshipTaskEntities();
 
             JobScheduleList = new ObservableCollection<JobSchedule>(dbcontext.JobSchedules);
+
+            //JobScheduleLogStatusList = new ObservableCollection<JobSchedule>((IEnumerable<JobSchedule>)dbcontext.JobScheduleLogStatus);
+
+            LogStatus = new ObservableCollection<LogState>();
 
             SelectedItems = new List<object>();
 
@@ -40,8 +46,40 @@ namespace JobScheduleTimeline.ViewModels
             FrqTypeList.Add(new KeyValuePair<int, string>(3, "PerWeek"));
             FrqTypeList.Add(new KeyValuePair<int, string>(4, "PerMonth"));
 
+            LogStatus = CreateStatuses();
+
         }
 
+        public class LogState
+        {
+            public static LogState Create()
+            {
+                return ViewModelSource.Create(() => new LogState());
+            }
+
+            protected LogState() { }
+            public virtual int Id { get; set; }
+            public virtual string Caption { get; set; }
+            public virtual Brush Brush { get; set; }
+        }
+
+        public static string[] Description = {"", "Started", "Successful", "Warning", "Failed", "Acknowledged" };
+        public static Brush[] BrushStates = { new SolidColorBrush(Colors.Blue),new SolidColorBrush(Colors.Blue), new SolidColorBrush(Colors.Green), new SolidColorBrush(Colors.Yellow), new SolidColorBrush(Colors.Red), new SolidColorBrush(Colors.Pink) };
+
+        ObservableCollection<LogState> CreateStatuses()
+        {
+            ObservableCollection<LogState> result = new ObservableCollection<LogState>();
+
+            for (int i = 1; i < 6; i++)
+            {
+                LogState logState = LogState.Create();
+                logState.Id = i;
+                logState.Brush = BrushStates[i];
+                logState.Caption = Description[i];
+                result.Add(logState);
+            }
+            return result;
+        }
 
         private void SelectedItemss_ListChanged(object sender, ListChangedEventArgs e)
         {
@@ -60,7 +98,7 @@ namespace JobScheduleTimeline.ViewModels
             SqlParameter ResourceIdsParam = new SqlParameter("ResourceIdsCSV", (SelectedItems==null)? null : string.Join(",", SelectedItems));
             object[] parameters = new object[] { StartParam, EndParam, ResourceIdsParam };
 
-            Results = dbcontext.Database.SqlQuery<JobScheduleTimeline_Result>("EXEC [dbo].[JobScheduleTimeline] @StartDate , @EndDate , @ResourceIdsCSV", parameters).ToList();
+            Results = dbcontext.Database.SqlQuery<JobScheduleTimeline1_Result>("EXEC [dbo].[JobScheduleTimeline] @StartDate , @EndDate , @ResourceIdsCSV", parameters).ToList();
 
             Appointments.Clear();
             
@@ -80,8 +118,19 @@ namespace JobScheduleTimeline.ViewModels
                     DoctorId = item.JobScheduleId,
                     Recurrence = item.Reccurance,
                     FrequencyType = item.FrequencyTypeId,
-                    FrequencyInterval = item.FrequencyInterval
+                    FrequencyInterval = item.FrequencyInterval,
+                    JobScheduleLogStatusId = item.JobScheduleLogStatusId
                 };
+
+                if(pattern.Recurrence == 0)
+                {
+                    if (!item.TimeFrom.HasValue)
+                        continue;
+
+                    DateTime StartDate = new DateTime(pattern.StartTime.Year, pattern.StartTime.Month, pattern.StartTime.Day, pattern.TimeFrom.Value.Hour, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
+                    pattern.StartTime = StartDate;
+
+                }
 
                 if (pattern.Recurrence == 1)
                 {
@@ -90,7 +139,7 @@ namespace JobScheduleTimeline.ViewModels
 
                     DateTime StartDate = new DateTime(pattern.StartTime.Year,pattern.StartTime.Month,pattern.StartTime.Day, pattern.TimeFrom.Value.Hour, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
 
-
+                    pattern.EndTime = StartDate.AddMinutes(30);
 
                     pattern.AppointmentType = AppointmentType.Pattern;
                     
@@ -180,10 +229,12 @@ namespace JobScheduleTimeline.ViewModels
         public ObservableCollection<Appointment> SelectedAppointments { get; set; }
         public InternshipTaskEntities dbcontext { get; private set; }
         public ObservableCollection<JobSchedule> JobScheduleList { get; private set; }
+        public ObservableCollection<JobSchedule> JobScheduleLogStatusList { get; private set; }
+        public ObservableCollection<LogState> LogStatus { get; private set; }
         public List<object> SelectedItems { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
-        public List<JobScheduleTimeline_Result> Results { get; set; }
+        public List<JobScheduleTimeline1_Result> Results { get; set; }
 
         public void Init()
         {
@@ -213,6 +264,7 @@ namespace JobScheduleTimeline.ViewModels
         public DateTime PatternTime { get; internal set; }
         public DateTime? TimeFrom { get; internal set; }
         public DateTime? TimeTo { get; internal set; }
+        public int? JobScheduleLogStatusId { get; internal set; }
     }
 
 }

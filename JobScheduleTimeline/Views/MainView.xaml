@@ -153,7 +153,7 @@
             </TabItem>
 
             <TabItem Header="Timeline" BorderBrush="#FF56ED9E" Foreground="#FF269851">
-
+                
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -162,13 +162,31 @@
 
                     <dxsch:SchedulerControl ActiveViewType="TimelineView" Grid.Column="0" GroupType="Resource" x:Name="scheduler" ShowBorder="True">
 
-                    <dxsch:TimelineView x:Name="timelineView" AppointmentMinHeight="50" />
+                        <dxsch:TimelineView x:Name="timelineView" AppointmentMinHeight="50" 
+                                            >
+
+                            <dxsch:TimelineView.TimeScales >
+                                <!--<dxsch:TimeScale ScaleUnit="Hour" UnitCount="1" MinWidth="0"/>-->
+                                <dxsch:TimeScale ScaleUnit="Minute" UnitCount="30" MinWidth="60"/>
+                            </dxsch:TimelineView.TimeScales>
+                            
+                        </dxsch:TimelineView>
 
                     <dxsch:SchedulerControl.DataSource>
-                        <dxsch:DataSource ResourcesSource="{Binding JobScheduleList}" AppointmentsSource="{Binding Appointments}">
+                        <dxsch:DataSource ResourcesSource="{Binding JobScheduleList}" AppointmentsSource="{Binding Appointments}"
+                                          AppointmentStatusesSource="{Binding LogStatus}">
+
+                            <dxsch:DataSource.AppointmentStatusMappings>
+                                <dxsch:AppointmentStatusMappings
+                                    Brush="Brush"
+                                    Caption="Caption"
+                                    Id="Id" />
+                            </dxsch:DataSource.AppointmentStatusMappings>
+
                             <dxsch:DataSource.ResourceMappings>
                                 <dxsch:ResourceMappings Caption="Name" Id="JobScheduleId"/>
                             </dxsch:DataSource.ResourceMappings>
+                            
                             <dxsch:DataSource.AppointmentMappings>
                                 <dxsch:AppointmentMappings 
                                         Start="StartTime"
@@ -177,9 +195,11 @@
                                         Id="Id"
                                         End="EndTime"
                                         RecurrenceInfo="RecurrenceInfo"
-                                        Type="AppointmentType">
+                                        Type="AppointmentType"
+                                        StatusId="JobScheduleLogStatusId">
                                 </dxsch:AppointmentMappings>
                             </dxsch:DataSource.AppointmentMappings>
+
                         </dxsch:DataSource>
                     </dxsch:SchedulerControl.DataSource>
                 </dxsch:SchedulerControl>
@@ -187,33 +207,30 @@
                 <dxe:DateNavigator Grid.Column="1" x:Name="dateNavigator" IsMultiSelect="True" HighlightHolidays="True" >
                     <dxe:DateNavigator.StyleSettings>
                         <dxsch:SchedulerDateNavigatorStyleSettings Scheduler="{Binding ElementName=timelineView}" />
-                    </dxe:DateNavigator.StyleSettings>
-                    
+                    </dxe:DateNavigator.StyleSettings>                    
 
-                        <dxe:DateNavigator.Appearance>
-                            <dxe:DateNavigatorCellAppearance>
-                                <dxe:DateNavigatorCellAppearance.NormalState>
-                                    <dxe:DateNavigatorStateAppearance Foreground="Black" Background="LightBlue" />
-                                </dxe:DateNavigatorCellAppearance.NormalState>
-                                <dxe:DateNavigatorCellAppearance.MouseOverState>
-                                    <dxe:DateNavigatorStateAppearance Foreground="MintCream" Background="LightGreen" />
-                                </dxe:DateNavigatorCellAppearance.MouseOverState>
-                                <dxe:DateNavigatorCellAppearance.SpecialDateState>
-                                    <dxe:DateNavigatorStateAppearance Foreground="Black" Background="LightBlue" CornerRadius="5"/>
-                                </dxe:DateNavigatorCellAppearance.SpecialDateState>
-                            </dxe:DateNavigatorCellAppearance>
-                        </dxe:DateNavigator.Appearance>
-                    </dxe:DateNavigator>
-                 
+                    <dxe:DateNavigator.Appearance>
+                        <dxe:DateNavigatorCellAppearance>
+                            <dxe:DateNavigatorCellAppearance.NormalState>
+                                <dxe:DateNavigatorStateAppearance Foreground="Black" Background="LightBlue" />
+                            </dxe:DateNavigatorCellAppearance.NormalState>
+                            <dxe:DateNavigatorCellAppearance.MouseOverState>
+                                <dxe:DateNavigatorStateAppearance Foreground="MintCream" Background="LightGreen" />
+                            </dxe:DateNavigatorCellAppearance.MouseOverState>
+                            <dxe:DateNavigatorCellAppearance.SpecialDateState>
+                                <dxe:DateNavigatorStateAppearance Foreground="Black" Background="LightBlue" CornerRadius="5"/>
+                            </dxe:DateNavigatorCellAppearance.SpecialDateState>
+                        </dxe:DateNavigatorCellAppearance>
+                    </dxe:DateNavigator.Appearance>
+      
+                </dxe:DateNavigator>                
                 
                 
                 </Grid>
 
             </TabItem>
 
-        </TabControl>
-
-        
+        </TabControl>        
 
     </Grid>
 

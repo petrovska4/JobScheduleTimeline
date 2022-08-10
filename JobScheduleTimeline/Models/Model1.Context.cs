@@ -37,7 +37,7 @@ namespace JobScheduleTimeline.Models
         public virtual DbSet<JobScheduleParameter> JobScheduleParameters { get; set; }
         public virtual DbSet<JobScheduleStamp> JobScheduleStamps { get; set; }
     
-        public virtual ObjectResult<JobScheduleTimeline_Result> JobScheduleTimeline(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, string resourceIdsCSV)
+        public virtual ObjectResult<JobScheduleTimeline1_Result> JobScheduleTimeline(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, string resourceIdsCSV)
         {
             var startDateParameter = startDate.HasValue ?
                 new ObjectParameter("StartDate", startDate) :
@@ -51,7 +51,24 @@ namespace JobScheduleTimeline.Models
                 new ObjectParameter("ResourceIdsCSV", resourceIdsCSV) :
                 new ObjectParameter("ResourceIdsCSV", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<JobScheduleTimeline_Result>("JobScheduleTimeline", startDateParameter, endDateParameter, resourceIdsCSVParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<JobScheduleTimeline1_Result>("JobScheduleTimeline", startDateParameter, endDateParameter, resourceIdsCSVParameter);
+        }
+    
+        public virtual ObjectResult<JobScheduleTimeline1_Result> JobScheduleTimeline1(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, string resourceIdsCSV)
+        {
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            var resourceIdsCSVParameter = resourceIdsCSV != null ?
+                new ObjectParameter("ResourceIdsCSV", resourceIdsCSV) :
+                new ObjectParameter("ResourceIdsCSV", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<JobScheduleTimeline1_Result>("JobScheduleTimeline1", startDateParameter, endDateParameter, resourceIdsCSVParameter);
         }
     }
 }

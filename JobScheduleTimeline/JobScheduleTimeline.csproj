@@ -120,7 +120,7 @@
     <Compile Include="Models\JobScheduleStamp.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\JobScheduleTimeline_Result.cs">
+    <Compile Include="Models\JobScheduleTimeline1_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Model1.Context.cs">

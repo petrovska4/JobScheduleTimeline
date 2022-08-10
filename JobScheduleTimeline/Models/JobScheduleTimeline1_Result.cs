@@ -11,7 +11,7 @@ namespace JobScheduleTimeline.Models
 {
     using System;
     
-    public partial class JobScheduleTimeline_Result
+    public partial class JobScheduleTimeline1_Result
     {
         public int JobScheduleId { get; set; }
         public System.DateTime Started { get; set; }
@@ -22,5 +22,6 @@ namespace JobScheduleTimeline.Models
         public Nullable<int> FrequencyTypeId { get; set; }
         public Nullable<int> FrequencyInterval { get; set; }
         public string OccuranceType { get; set; }
+        public Nullable<int> JobScheduleLogStatusId { get; set; }
     }
 }

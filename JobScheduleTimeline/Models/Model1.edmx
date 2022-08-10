@@ -590,6 +590,11 @@
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
             <Parameter Name="ResourceIdsCSV" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="JobScheduleTimeline1" ReturnType="Collection(InternshipTaskModel.JobScheduleTimeline1_Result)">
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ResourceIdsCSV" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="JobScheduleTimeline_Result">
           <Property Type="Int32" Name="JobScheduleId" Nullable="false" />
@@ -601,6 +606,18 @@
           <Property Type="Int32" Name="FrequencyTypeId" Nullable="true" />
           <Property Type="Int32" Name="FrequencyInterval" Nullable="true" />
           <Property Type="String" Name="OccuranceType" Nullable="false" MaxLength="8" />
+        </ComplexType>
+        <ComplexType Name="JobScheduleTimeline1_Result">
+          <Property Type="Int32" Name="JobScheduleId" Nullable="false" />
+          <Property Type="DateTime" Name="Started" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="Ended" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeFrom" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="TimeTo" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Reccurance" Nullable="false" />
+          <Property Type="Int32" Name="FrequencyTypeId" Nullable="true" />
+          <Property Type="Int32" Name="FrequencyInterval" Nullable="true" />
+          <Property Type="String" Name="OccuranceType" Nullable="false" MaxLength="8" />
+          <Property Type="Int32" Name="JobScheduleLogStatusId" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -722,9 +739,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="JobScheduleTimeline" FunctionName="InternshipTaskModel.Store.JobScheduleTimeline">
+          <FunctionImportMapping FunctionImportName="JobScheduleTimeline1" FunctionName="InternshipTaskModel.Store.JobScheduleTimeline">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="InternshipTaskModel.JobScheduleTimeline_Result">
+              <ComplexTypeMapping TypeName="InternshipTaskModel.JobScheduleTimeline1_Result">
                 <ScalarProperty Name="JobScheduleId" ColumnName="JobScheduleId" />
                 <ScalarProperty Name="Started" ColumnName="Started" />
                 <ScalarProperty Name="Ended" ColumnName="Ended" />
@@ -734,6 +751,7 @@
                 <ScalarProperty Name="FrequencyTypeId" ColumnName="FrequencyTypeId" />
                 <ScalarProperty Name="FrequencyInterval" ColumnName="FrequencyInterval" />
                 <ScalarProperty Name="OccuranceType" ColumnName="OccuranceType" />
+                <ScalarProperty Name="JobScheduleLogStatusId" ColumnName="JobScheduleLogStatusId" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
