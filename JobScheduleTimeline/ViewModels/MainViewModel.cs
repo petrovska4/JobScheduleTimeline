@@ -138,7 +138,7 @@ namespace JobScheduleTimeline.ViewModels
                         continue;
 
                     DateTime StartDate = new DateTime(pattern.StartTime.Year,pattern.StartTime.Month,pattern.StartTime.Day, pattern.TimeFrom.Value.Hour, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
-
+                    pattern.StartTime = StartDate;
                     pattern.EndTime = StartDate.AddMinutes(30);
 
                     pattern.AppointmentType = AppointmentType.Pattern;
@@ -154,12 +154,15 @@ namespace JobScheduleTimeline.ViewModels
                         if(StartDate.Hour < DateTime.Now.Hour)
                         {
                             RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Daily(StartDate.AddDays(1)).Build();
+                            info.Duration = new TimeSpan(0, 30, 0);
                             pattern.RecurrenceInfo = info.ToXml();
                         }
                         else
                         {
                             RecurrenceInfo info = (RecurrenceInfo)RecurrenceBuilder.Daily(StartDate).Build();
-                            pattern.RecurrenceInfo = info.ToXml();
+                            info.Duration = new TimeSpan(0,30,0);
+                            pattern.RecurrenceInfo = info.ToXml();                           
+                            
                         }                        
                     }
                     if (pattern.FrequencyType == 2)
