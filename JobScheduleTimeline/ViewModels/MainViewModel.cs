@@ -129,7 +129,7 @@ namespace JobScheduleTimeline.ViewModels
 
                     DateTime StartDate = new DateTime(pattern.StartTime.Year, pattern.StartTime.Month, pattern.StartTime.Day, pattern.TimeFrom.Value.Hour, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
                     pattern.StartTime = StartDate;
-
+                    pattern.Time = new TimeSpan(pattern.TimeFrom.Value.Hour, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
                 }
 
                 if (pattern.Recurrence == 1)
@@ -140,6 +140,7 @@ namespace JobScheduleTimeline.ViewModels
                     DateTime StartDate = new DateTime(pattern.StartTime.Year,pattern.StartTime.Month,pattern.StartTime.Day, pattern.TimeFrom.Value.Hour, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
                     pattern.StartTime = StartDate;
                     pattern.EndTime = StartDate.AddMinutes(30);
+                    pattern.Time = new TimeSpan(pattern.TimeFrom.Value.Hour, pattern.TimeFrom.Value.Minute, pattern.TimeFrom.Value.Second);
 
                     pattern.AppointmentType = AppointmentType.Pattern;
                     
@@ -220,6 +221,10 @@ namespace JobScheduleTimeline.ViewModels
                     }
                 }
 
+                string str = pattern.Time.ToString() + " ID:"  + pattern.DoctorId;
+
+                pattern.Subject = str;
+
                 Appointments.Add(pattern);
             }
 
@@ -268,6 +273,8 @@ namespace JobScheduleTimeline.ViewModels
         public DateTime? TimeFrom { get; internal set; }
         public DateTime? TimeTo { get; internal set; }
         public int? JobScheduleLogStatusId { get; internal set; }
+        public TimeSpan Time { get; internal set; }
+        public string Subject { get; internal set; }
     }
 
 }

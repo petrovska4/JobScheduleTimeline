@@ -8,12 +8,38 @@
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
     xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduling" 
-    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxschv="http://schemas.devexpress.com/winfx/2008/xaml/scheduling/visual" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxscht="http://schemas.devexpress.com/winfx/2008/xaml/scheduling/themekeys"
     x:Class="JobScheduleTimeline.Views.MainView"
     mc:Ignorable="d" d:DesignHeight="800" d:DesignWidth="1000">
     <UserControl.DataContext>
         <ViewModels:MainViewModel/>
     </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="appointmentContentTemplate">
+            <dxschv:AppointmentContentPanel>
+                <dxschv:AppointmentContentPanel.IntervalSubject>
+                    <dxschv:AppointmentIntervalSubjectPresenter WordWrap="True"/>
+                </dxschv:AppointmentContentPanel.IntervalSubject>
+                <dxschv:AppointmentContentPanel.Images>
+                    <dxschv:AppointmentImagesPresenter/>
+                </dxschv:AppointmentContentPanel.Images>
+            </dxschv:AppointmentContentPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TooltipTemplate">
+            <dxlc:LayoutControl IsHitTestVisible="False" Orientation="Vertical" Padding="11">
+                <TextBlock Text="{Binding Appointment.Subject}" FontWeight="Bold" FontSize="17" />
+                <dxlc:LayoutControl Margin="0,5,0,0" VerticalAlignment="Top" Orientation="Vertical" Padding="0">
+                    <dxlc:LayoutItem Style="{DynamicResource {dxscht:SchedulerFlyoutThemeKey ResourceKey=LayoutItem_Start}}" />
+                    <dxlc:LayoutItem Style="{DynamicResource {dxscht:SchedulerFlyoutThemeKey ResourceKey=LayoutItem_End}}" />
+                </dxlc:LayoutControl>
+            </dxlc:LayoutControl>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    
 
     <Grid Background="#FFF3F9F7" >
         <Grid.RowDefinitions>
@@ -160,14 +186,70 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
+                    <dxsch:SchedulerControl x:Name="scheduler" ActiveViewType="TimelineView" Grid.Column="0" GroupType="Resource" ShowBorder="True" ShowDateNavigationPanel="True"
+                                            ToolTipContentTemplate="{StaticResource TooltipTemplate}">
+
+                        
+
+                        <dxsch:TimelineView x:Name="timelineView" AppointmentMinHeight="60"   ResourceAutoHeight="True"
+                                            StretchAppointments="False" SnapToCellsMode="Never" TimeRegionVisibility="Never"
+                                            AppointmentContentTemplate="{StaticResource appointmentContentTemplate}"
+                                            >
+
+                            <dxsch:TimelineView.TimeScales>
+                                <dxsch:TimeScale ScaleUnit="Hour" UnitCount="1" MinWidth="0"/>
+                                <dxsch:TimeScale ScaleUnit="Minute" UnitCount="30" MinWidth="60"/>
+                                <dxsch:TimeScale ScaleUnit="Minute" UnitCount="15" MinWidth="60"/>
+                                <dxsch:TimeScale ScaleUnit="Minute" UnitCount="10" MinWidth="60"/>
+                            </dxsch:TimelineView.TimeScales>
+
+
+                        </dxsch:TimelineView>
+
+
+                        <dxsch:SchedulerControl.DataSource>
+                            <dxsch:DataSource ResourcesSource="{Binding JobScheduleList}" AppointmentsSource="{Binding Appointments}"
+                                              AppointmentStatusesSource="{Binding LogStatus}">
+
+                                <dxsch:DataSource.AppointmentStatusMappings>
+                                    <dxsch:AppointmentStatusMappings
+                                        Brush="Brush"
+                                        Caption="Caption"
+                                        Id="Id" />
+                                </dxsch:DataSource.AppointmentStatusMappings>
+
+                                <dxsch:DataSource.ResourceMappings>
+                                    <dxsch:ResourceMappings Caption="Name" Id="JobScheduleId"/>
+                                </dxsch:DataSource.ResourceMappings>
+
+                                <dxsch:DataSource.AppointmentMappings>
+                                    <dxsch:AppointmentMappings 
+                                            Start="StartTime"
+                                            Subject="Subject"
+                                            ResourceId="DoctorId"
+                                            Id="Id"
+                                            End="EndTime"
+                                            RecurrenceInfo="RecurrenceInfo"
+                                            Type="AppointmentType"
+                                            StatusId="JobScheduleLogStatusId"
+                                            Description="Time">
+                                    </dxsch:AppointmentMappings>
+                                </dxsch:DataSource.AppointmentMappings>
+
+                            </dxsch:DataSource>
+                        </dxsch:SchedulerControl.DataSource>
+
+                    </dxsch:SchedulerControl>
+
+
                     <StackPanel Grid.Column="1">
 
-                        <dxe:DateNavigator x:Name="dateNavigator" IsMultiSelect="True" HighlightHolidays="False" ShowWeekNumbers="False">
+                        <dxe:DateNavigator x:Name="dateNavigator" VerticalAlignment="Stretch" IsMultiSelect="False" HighlightHolidays="False" ShowWeekNumbers="False">
                             <dxmvvm:Interaction.Behaviors>
                                 <dxmvvm:EventToCommand/>
                             </dxmvvm:Interaction.Behaviors>
                             <dxe:DateNavigator.StyleSettings>
-                                <dxsch:SchedulerDateNavigatorStyleSettings SchedulerControl="{Binding ElementName=scheduler}" />
+                                <dxsch:SchedulerDateNavigatorStyleSettings Scheduler="{Binding ElementName=timelineView}" />
                             </dxe:DateNavigator.StyleSettings>
 
                             <dxe:DateNavigator.Appearance>
@@ -186,7 +268,7 @@
 
                         </dxe:DateNavigator>
 
-                        <GroupBox Header="Log Status" Foreground="Gray" FontWeight="Bold" Margin="0,5,15,0">
+                        <GroupBox Header="Log Status" Foreground="Gray" FontWeight="Bold" Margin="0,5,15,0" Width="211">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="15px"/>
@@ -213,51 +295,9 @@
                             </Grid>
                         </GroupBox>
 
-                        <!--<dxsch:ResourceTreeControl>
-                            <dxsch:ResourceTreeControl.Scheduler
-                        </dxsch:ResourceTreeControl>-->
-
-
                     </StackPanel>
 
-                    <dxsch:SchedulerControl Name="scheduler" ActiveViewType="TimelineView" Grid.Column="0" GroupType="Resource" ShowBorder="True" ShowDateNavigationPanel="True">
-
-                        <dxsch:TimelineView x:Name="timelineView" AppointmentMinHeight="40" AppointmentMinWidth="70" 
-                                            StretchAppointments="False" SnapToCellsMode="Never" TimeRegionVisibility="Never"/>
-
-                        <dxsch:SchedulerControl.DataSource>
-                            <dxsch:DataSource ResourcesSource="{Binding JobScheduleList}" AppointmentsSource="{Binding Appointments}"
-                                              AppointmentStatusesSource="{Binding LogStatus}">
-
-                                <dxsch:DataSource.AppointmentStatusMappings>
-                                    <dxsch:AppointmentStatusMappings
-                                        Brush="Brush"
-                                        Caption="Caption"
-                                        Id="Id" />
-                                </dxsch:DataSource.AppointmentStatusMappings>
-
-                                <dxsch:DataSource.ResourceMappings>
-                                    <dxsch:ResourceMappings Caption="Name" Id="JobScheduleId"/>
-                                </dxsch:DataSource.ResourceMappings>
-
-                                <dxsch:DataSource.AppointmentMappings>
-                                    <dxsch:AppointmentMappings 
-                                            Start="StartTime"
-                                            Subject="PatientName"
-                                            ResourceId="DoctorId"
-                                            Id="Id"
-                                            End="EndTime"
-                                            RecurrenceInfo="RecurrenceInfo"
-                                            Type="AppointmentType"
-                                            StatusId="JobScheduleLogStatusId">
-                                    </dxsch:AppointmentMappings>
-                                </dxsch:DataSource.AppointmentMappings>
-
-                            </dxsch:DataSource>
-                        </dxsch:SchedulerControl.DataSource>
-
-                    </dxsch:SchedulerControl>
-
+                    
                 </Grid>
 
             </TabItem>
